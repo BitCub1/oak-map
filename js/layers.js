@@ -217,7 +217,7 @@ const OAKLayers = (function () {
                         className: 'city-tooltip',
                         direction: 'top',
                         offset: [0, -8],
-                        sticky: true,
+                        sticky: false,
                         permanent: false,
                         opacity: 1
                     });
@@ -537,7 +537,7 @@ const OAKLayers = (function () {
                 className: 'city-tooltip',
                 direction: 'top',
                 offset: [0, -8],
-                sticky: true,
+                sticky: false,
                 permanent: false,
                 opacity: 1
             });
@@ -702,7 +702,7 @@ const OAKLayers = (function () {
                     className: 'city-tooltip',
                     direction: 'top',
                     offset: [0, -8],
-                    sticky: true,
+                    sticky: false,
                     permanent: false,
                     opacity: 1
                 });
