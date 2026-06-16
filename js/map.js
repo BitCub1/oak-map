@@ -37,10 +37,6 @@ const OAKMap = (function () {
             maxZoom: MAX_ZOOM
         }).addTo(map);
 
-        // Custom zoom control — bottom left
-        L.control.zoom({
-            position: 'bottomleft'
-        }).addTo(map);
 
         // Close info box / deselect on map click (empty area)
         map.on('click', function (e) {

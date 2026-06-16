@@ -980,7 +980,10 @@ const OAKLayers = (function () {
                         // Insert intermediate highway vertices
                         // from segmentIndex of prev + 1 to segmentIndex of curr
                         for (var h = prev.segmentIndex + 1; h <= curr.segmentIndex; h++) {
-                            newRoute.push(hwRoute[h]);
+                            var proj = projectPointOnSegment(hwRoute[h], bartRoute[i-1], bartRoute[i]);
+                            if (Math.sqrt(proj.dist2) < SNAP_THRESHOLD) {
+                                newRoute.push(hwRoute[h]);
+                            }
                         }
                     }
                     newRoute.push(curr.coords);
