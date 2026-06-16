@@ -17,19 +17,21 @@ const OAKInfoBox = (function () {
     let currentName = null;
 
     function init() {
-        closeBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            // Reset collapsed state so next open is fully expanded
-            infoBox.classList.remove('collapsed');
-            var t = document.getElementById('info-box-toggle');
-            if (t) {
-                t.classList.remove('active');
-                t.classList.add('hidden');
-            }
-            if (window.OAKApp && window.OAKApp.clearSelection) {
-                window.OAKApp.clearSelection();
-            }
-        });
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                // Reset collapsed state so next open is fully expanded
+                infoBox.classList.remove('collapsed');
+                var t = document.getElementById('info-box-toggle');
+                if (t) {
+                    t.classList.remove('active');
+                    t.classList.add('hidden');
+                }
+                if (window.OAKApp && window.OAKApp.clearSelection) {
+                    window.OAKApp.clearSelection();
+                }
+            });
+        }
     }
 
     function show() {
