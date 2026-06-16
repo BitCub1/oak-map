@@ -302,9 +302,16 @@ const OAKLayers = (function () {
     }
 
     function createBartStationLayer(data) {
+        var stationsCoords = OAKRoutes.getBartStations ? OAKRoutes.getBartStations() : null;
         bartStationLayer = L.geoJSON(data, {
             pointToLayer: function (feature, latlng) {
-                return L.marker(latlng, {
+                var name = feature.properties.name || '';
+                var normName = OAKRoutes.normalizeStationName ? OAKRoutes.normalizeStationName(name) : name;
+                var displayCoords = latlng;
+                if (stationsCoords && stationsCoords[normName]) {
+                    displayCoords = L.latLng(stationsCoords[normName][0], stationsCoords[normName][1]);
+                }
+                return L.marker(displayCoords, {
                     icon: L.divIcon({
                         className: 'bart-station-icon-square',
                         iconSize: [10, 10],
@@ -690,15 +697,7 @@ const OAKLayers = (function () {
             animatePolyline(bartLayer);
         }
 
-        if (!layer && bartStationLayer) {
-            bartStationLayer.eachLayer(function (l) {
-                var name = l.feature.properties.name || '';
-                if (name === stationName) {
-                    layer = l;
-                }
-            });
-        }
-        var selectedCoords = (layer && typeof layer.getLatLng === 'function') ? layer.getLatLng() : bartRoute[0];
+        var selectedCoords = bartRoute[0];
         
         // Add pulsing ripple marker at station coordinate
         addRippleMarker(selectedCoords);
