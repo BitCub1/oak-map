@@ -387,6 +387,18 @@ const OAKLayers = (function () {
             }
         });
         updateBartStationsVisibility();
+        updateCountyVisibility();
+    }
+
+    function updateCountyVisibility() {
+        if (!countyLayer) return;
+        var hasSelection = selectedCities.size > 0 || selectedCountyName !== null;
+        if (hasSelection) {
+            countyLayer.setStyle(STYLES.countyHidden);
+        } else {
+            countyLayer.setStyle(STYLES.countySelected);
+        }
+        countyLayer.bringToBack();
     }
 
     function updateBartStationsVisibility() {
@@ -619,15 +631,7 @@ const OAKLayers = (function () {
         selectedCountyName = name;
 
         if (countyLayer) {
-            countyLayer.setStyle(function (feature) {
-                var rawName = feature.properties.NAME || feature.properties.name || '';
-                var featureCountyName = rawName.replace(/ County$/i, '');
-                if (featureCountyName === selectedCountyName) {
-                    return STYLES.countySelected;
-                } else {
-                    return STYLES.countyHidden;
-                }
-            });
+            countyLayer.setStyle(STYLES.countyHidden);
             if (!map.hasLayer(countyLayer)) {
                 countyLayer.addTo(map);
             }
@@ -758,15 +762,10 @@ const OAKLayers = (function () {
         });
         selectedCities.clear();
 
+        selectedCountyName = null;
+
         // Restore all city outlines and tooltips
         updateCityBorders();
-
-        // Reset county selection styles instead of removing it from the map
-        if (countyLayer) {
-            countyLayer.setStyle(STYLES.countySelected);
-            countyLayer.bringToBack();
-        }
-        selectedCountyName = null;
 
         OAKInfoBox.showBayArea();
     }
