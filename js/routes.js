@@ -425,6 +425,53 @@ const OAKRoutes = (function () {
         }
     };
 
+    // Add Richmond bridge extension to all Marin and Sonoma cities that connect to Richmond BART
+    var richmondBridgeBranch = [
+        [37.960, -122.530], // San Rafael / US-101
+        [37.962, -122.507], // Bridge toll plaza / interchange
+        [37.957, -122.493], // Richmond-San Rafael Bridge West
+        [37.942, -122.428], // Richmond-San Rafael Bridge East
+        [37.935, -122.391], // I-580 East
+        [37.9370, -122.3527] // Richmond BART Station
+    ];
+
+    var marinSonomaRichmondCities = [
+        "San Rafael", "Novato", "San Anselmo", "Fairfax", "Ross",
+        "Santa Rosa", "Petaluma", "Rohnert Park", "Windsor", "Healdsburg", "Sonoma", "Cloverdale", "Sebastopol", "Cotati"
+    ];
+
+    marinSonomaRichmondCities.forEach(function (city) {
+        if (!STATION_BRANCH_EXTENSIONS[city]) {
+            STATION_BRANCH_EXTENSIONS[city] = {};
+        }
+        STATION_BRANCH_EXTENSIONS[city]["Richmond"] = richmondBridgeBranch;
+    });
+
+    // Custom connection points for Larkspur and Corte Madera
+    STATION_BRANCH_EXTENSIONS["Larkspur"] = {
+        "Richmond": [
+            [37.934, -122.535],
+            [37.960, -122.530],
+            [37.962, -122.507],
+            [37.957, -122.493],
+            [37.942, -122.428],
+            [37.935, -122.391],
+            [37.9370, -122.3527]
+        ]
+    };
+
+    STATION_BRANCH_EXTENSIONS["Corte Madera"] = {
+        "Richmond": [
+            [37.925, -122.528],
+            [37.960, -122.530],
+            [37.962, -122.507],
+            [37.957, -122.493],
+            [37.942, -122.428],
+            [37.935, -122.391],
+            [37.9370, -122.3527]
+        ]
+    };
+
     function isStationInCity(stationName, cityName) {
         if (!stationName || !cityName) return false;
         var s = normalizeStationName(stationName).toLowerCase();
