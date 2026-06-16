@@ -331,7 +331,13 @@ const OAKRoutes = (function () {
         "Daly City": "Daly City", "South San Francisco": "South San Francisco",
         "San Bruno": "San Bruno", "Colma": "Colma", "Millbrae": "Millbrae",
         "San Jose": "Berryessa", "Milpitas": "Milpitas",
-        "Brisbane": "Balboa Park"
+        "Brisbane": "Balboa Park",
+        "Vacaville": "North Concord/Martinez",
+        "Fairfield": "North Concord/Martinez",
+        "Suisun City": "North Concord/Martinez",
+        "Benicia": "North Concord/Martinez",
+        "Dixon": "Pittsburg Center",
+        "Rio Vista": "Antioch"
     };
 
     // ================================================================
@@ -352,15 +358,14 @@ const OAKRoutes = (function () {
 
     var STATION_BRANCH_EXTENSIONS = {
         "Vacaville": {
-            "Pittsburg/Bay Point": [
+            "North Concord/Martinez": [
                 [38.200, -122.120], // Cordelia
                 [38.150, -122.126], // I-680
                 [38.085, -122.115],
                 [38.046, -122.123], // Benicia-Martinez Bridge north
                 [38.026, -122.124], // Benicia-Martinez Bridge south
                 [38.008, -122.112], // CA-4 interchange
-                [38.003, -122.025],
-                [38.0189, -121.9452] // Pittsburg/Bay Point
+                [38.0030, -122.0244] // North Concord/Martinez BART
             ]
         },
         "Fairfield": {
