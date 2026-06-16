@@ -260,7 +260,7 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     position: fixed;
     top: 36px;
     right: 0;
-    width: 320px;
+    width: 352px;
     max-height: calc(100vh - 36px);
     overflow-y: auto;
     background: #0a0a0a;
