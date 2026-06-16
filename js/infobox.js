@@ -20,7 +20,7 @@ const OAKInfoBox = (function () {
             // Reset collapsed state so next open is fully expanded
             infoBox.classList.remove('collapsed');
             var t = document.getElementById('info-box-toggle');
-            if (t) t.innerHTML = '&#x203A;';
+            if (t) t.innerHTML = '&#x2227;';
             if (window.OAKApp && window.OAKApp.clearSelection) {
                 window.OAKApp.clearSelection();
             }

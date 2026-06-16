@@ -21,8 +21,8 @@ const OAKApp = (function () {
         toggleBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             var collapsed = infoBox.classList.toggle('collapsed');
-            // Left-edge tab: › when open (click to collapse), ‹ when closed (click to expand)
-            toggleBtn.innerHTML = collapsed ? '&#x2039;' : '&#x203A;';
+            // Vertical tab: ∨ when collapsed (click to expand down), ∧ when expanded (click to collapse up)
+            toggleBtn.innerHTML = collapsed ? '&#x2228;' : '&#x2227;';
         });
 
         // 3. Initialize layers (loads GeoJSON async)

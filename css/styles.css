@@ -237,20 +237,21 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     overflow-y: auto;
     background: #0a0a0a;
     border-left: 1px solid #222;
+    border-bottom: 1px solid #222;
     z-index: 900;
     transition: transform 0.2s ease;
-    transform: translateX(0);
-    overflow: visible; /* allow left-edge toggle tab to protrude */
+    transform: translateY(0);
+    overflow: visible; /* allow bottom-edge toggle tab to protrude */
 }
 
 #info-box.hidden {
-    transform: translateX(100%);
+    transform: translateY(-100%);
     pointer-events: none;
 }
 
-/* Collapsed: full panel off-screen, only the left-edge tab remains visible */
+/* Collapsed: full panel off-screen, only the bottom-edge tab remains visible */
 #info-box.collapsed {
-    transform: translateX(100%);
+    transform: translateY(-100%);
     overflow: visible;
 }
 
@@ -263,20 +264,20 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     pointer-events: none;
 }
 
-/* Toggle tab — left edge of info panel */
+/* Toggle tab — bottom edge of info panel */
 #info-box-toggle {
     position: absolute;
-    left: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 56px;
+    left: 50%;
+    bottom: -20px;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 20px;
     background: #111;
     border: 1px solid #222;
-    border-right: none;
+    border-top: none;
     color: #666;
     font-size: 13px;
-    line-height: 56px;
+    line-height: 18px;
     text-align: center;
     cursor: pointer;
     transition: color 0.15s ease, background 0.15s ease;
@@ -632,10 +633,25 @@ h1, h2, h3, h4, h5, h6, label, button, input {
         bottom: 0;
         border-left: none;
         border-top: 1px solid #222;
+        border-bottom: none;
     }
 
     #info-box.hidden {
         transform: translateY(100%);
+    }
+
+    #info-box.collapsed {
+        transform: translateY(100%);
+    }
+
+    #info-box-toggle {
+        left: 50%;
+        bottom: auto;
+        top: -20px;
+        transform: translateX(-50%);
+        border: 1px solid #222;
+        border-bottom: none;
+        line-height: 18px;
     }
 
     #header-subtitle,
