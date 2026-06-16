@@ -112,7 +112,7 @@ const OAKLayers = (function () {
         },
         routeHighlight: {
             highway: {
-                color: '#FFFF00',
+                color: '#CCCCCC',
                 weight: 3.5,
                 opacity: 1,
                 lineCap: 'round',
