@@ -199,7 +199,7 @@ const OAK_DATA = {
     code: "OAK",
     lat: 37.7213,
     lng: -122.2208,
-    description: "Metropolitan Oakland International Airport — the heart of the Bay Area's transportation network, serving over 13 million passengers annually with direct access to I-880 and BART Coliseum station.",
+    description: "OAKLAND SAN FRANCISCO BAY AIRPORT — the heart of the Bay Area's transportation network, serving over 13 million passengers annually with direct access to I-880 and BART Coliseum station.",
     airlines: 7,
     destinations: 60,
     passengers: "13.6M (2024)"
