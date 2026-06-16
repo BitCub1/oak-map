@@ -46,7 +46,7 @@ const CITY_DATA = {
     "Clayton":        { pop: 10798, county: "Contra Costa", sub: "East Bay", emp: ["City of Clayton", "Mt. Diablo USD"], dist: 31, time: 36 },
 
     // === SAN FRANCISCO COUNTY (Peninsula) ===
-    "San Francisco":  { pop: 825000, county: "San Francisco", sub: "Peninsula", emp: ["City & County of SF", "UCSF", "Salesforce", "SF Unified School District", "Sutter Health"], dist: 22, time: 26 },
+    "San Francisco":  { pop: 825000, county: "San Francisco", sub: "Peninsula", emp: ["City & County of SF", "UCSF", "Salesforce", "SF Unified School District", "Sutter Health"], dist: 17, time: 21 },
 
     // === SAN MATEO COUNTY (Peninsula) ===
     "San Mateo":      { pop: 104000, county: "San Mateo", sub: "Peninsula", emp: ["Franklin Templeton (HQ)", "Fisher Investments", "Snowflake", "San Mateo-Foster City SD", "City of San Mateo"], dist: 28, time: 32 },

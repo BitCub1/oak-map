@@ -236,7 +236,7 @@ const OAKRoutes = (function () {
     R["Martinez"]      = [[38.019,-122.134],[37.978,-122.031],[37.928,-122.056],[37.906,-122.067],[37.893,-122.125],[37.878,-122.184]].concat(_CA24_OAK);
 
     // ---- SAN FRANCISCO ----
-    R["San Francisco"] = [[37.81827,-122.44704],[37.775,-122.419]].concat(_BAY_BRIDGE);
+    R["San Francisco"] = [[37.7930,-122.3968]].concat(_BAY_BRIDGE);
 
     // ---- SAN MATEO COUNTY (Peninsula via bridges) ----
     // Cities near San Mateo Bridge (CA-92)

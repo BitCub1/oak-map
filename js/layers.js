@@ -201,6 +201,17 @@ const OAKLayers = (function () {
             onEachFeature: function (feature, layer) {
                 var name = feature.properties.NAME || feature.properties.name || '';
 
+                if (name === 'San Francisco') {
+                    layer.getBounds = function() {
+                        return L.latLngBounds([37.7930, -122.3968], [37.7930, -122.3968]);
+                    };
+                    if (typeof layer.getCenter === 'function') {
+                        layer.getCenter = function() {
+                            return L.latLng(37.7930, -122.3968);
+                        };
+                    }
+                }
+
                 // Landmark cities always show a permanent label
                 var LANDMARKS = {'San Francisco': true, 'Oakland': true, 'Berkeley': true};
                 if (LANDMARKS[name]) {
