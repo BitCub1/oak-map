@@ -813,13 +813,15 @@ body.map-recording * {
 
 /* Map Selection Ripple Animations */
 .map-ripple-icon {
-    position: relative;
+    position: absolute !important;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    background: transparent !important;
+    border: none !important;
 }
 
 .ripple-dot {
@@ -828,6 +830,9 @@ body.map-recording * {
     background-color: #F04A00;
     border-radius: 50% !important;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 5;
 }
 

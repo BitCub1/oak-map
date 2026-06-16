@@ -233,7 +233,7 @@ const OAKLayers = (function () {
                         opacity: 1
                     });
                 } else {
-                    layer.bindTooltip(name, {
+                    layer.bindTooltip(name.toUpperCase(), {
                         className: 'city-tooltip',
                         direction: 'top',
                         offset: [0, -8],
@@ -315,7 +315,7 @@ const OAKLayers = (function () {
             },
             onEachFeature: function (feature, layer) {
                 var name = feature.properties.name || '';
-                var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name + '</span>';
+                var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name.toUpperCase() + '</span>';
                 layer.bindTooltip(labelHtml, {
                     className: 'city-tooltip',
                     direction: 'top',
@@ -594,7 +594,7 @@ const OAKLayers = (function () {
         // Restore tooltip — landmarks keep permanent label, others go back to hover
         if (sel.isStation) {
             sel.layer.unbindTooltip();
-            var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name + '</span>';
+            var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name.toUpperCase() + '</span>';
             sel.layer.bindTooltip(labelHtml, {
                 className: 'city-tooltip',
                 direction: 'top',
@@ -605,7 +605,7 @@ const OAKLayers = (function () {
             bindLandmarkTooltip(name, sel.layer);
         } else {
             sel.layer.unbindTooltip();
-            sel.layer.bindTooltip(name, {
+            sel.layer.bindTooltip(name.toUpperCase(), {
                 className: 'city-tooltip',
                 direction: 'top',
                 offset: [0, -8],
@@ -690,7 +690,15 @@ const OAKLayers = (function () {
             animatePolyline(bartLayer);
         }
 
-        var selectedCoords = bartRoute[0];
+        if (!layer && bartStationLayer) {
+            bartStationLayer.eachLayer(function (l) {
+                var name = l.feature.properties.name || '';
+                if (name === stationName) {
+                    layer = l;
+                }
+            });
+        }
+        var selectedCoords = (layer && typeof layer.getLatLng === 'function') ? layer.getLatLng() : bartRoute[0];
         
         // Add pulsing ripple marker at station coordinate
         addRippleMarker(selectedCoords);
@@ -703,7 +711,7 @@ const OAKLayers = (function () {
             }),
             pane: 'markerPane'
         });
-        var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + stationName + '</span>';
+        var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + stationName.toUpperCase() + '</span>';
         marker.bindTooltip(labelHtml, {
             className: 'city-tooltip city-tooltip--bart-selected',
             direction: 'top',
@@ -760,7 +768,7 @@ const OAKLayers = (function () {
             }
             if (sel.isStation) {
                 sel.layer.unbindTooltip();
-                var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name + '</span>';
+                var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name.toUpperCase() + '</span>';
                 sel.layer.bindTooltip(labelHtml, {
                     className: 'city-tooltip',
                     direction: 'top',
@@ -771,7 +779,7 @@ const OAKLayers = (function () {
                 bindLandmarkTooltip(name, sel.layer);
             } else {
                 sel.layer.unbindTooltip();
-                sel.layer.bindTooltip(name, {
+                sel.layer.bindTooltip(name.toUpperCase(), {
                     className: 'city-tooltip',
                     direction: 'top',
                     offset: [0, -8],
