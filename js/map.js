@@ -14,8 +14,8 @@ const OAKMap = (function () {
     const MAX_ZOOM = 16;
 
     const bounds = L.latLngBounds(
-        [37.1, -123.0],  // SW
-        [38.9, -121.2]   // NE
+        [36.85, -123.7],  // SW (includes southern Santa Clara County and western Sonoma County)
+        [38.9, -121.2]    // NE
     );
 
     function init() {
@@ -68,11 +68,6 @@ const OAKMap = (function () {
     }
 
     function fitBayArea() {
-        // Bay Area bounds: roughly SW to NE
-        const bounds = L.latLngBounds(
-            [37.1, -123.0],  // SW
-            [38.9, -121.2]   // NE
-        );
         map.fitBounds(bounds, { padding: [20, 20] });
     }
 
