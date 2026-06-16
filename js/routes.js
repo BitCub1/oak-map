@@ -319,8 +319,67 @@ const OAKRoutes = (function () {
     // PUBLIC API
     // ================================================================
 
+    // ================================================================
+    // HIGHWAY ROUTE EXTENSION FOR CITIES WITHOUT BART STATIONS
+    // ================================================================
+    var STATION_TO_CITY_EXTENSIONS = {
+        "Danville": {
+            "Walnut Creek": [[37.9056, -122.0669], [37.890, -122.058], [37.850, -122.032]]
+        },
+        "Clayton": {
+            "Concord": [[37.9737, -122.0291], [37.955, -121.970]]
+        }
+    };
+
+    function isStationInCity(stationName, cityName) {
+        if (!stationName || !cityName) return false;
+        var s = normalizeStationName(stationName).toLowerCase();
+        var c = cityName.toLowerCase();
+        
+        if (s.indexOf(c) !== -1 || c.indexOf(s) !== -1) return true;
+        
+        if (s === "berryessa" && c === "san jose") return true;
+        if (s === "bay fair" && c === "san leandro") return true;
+        
+        var oaklandStations = ["macarthur", "fruitvale", "coliseum", "lake merritt", "rockridge", "west oakland", "12th st oakland", "19th st oakland", "oakland airport"];
+        if (c === "oakland" && oaklandStations.indexOf(s) !== -1) return true;
+        
+        var berkeleyStations = ["downtown berkeley", "north berkeley", "ashby"];
+        if (c === "berkeley" && berkeleyStations.indexOf(s) !== -1) return true;
+        
+        var ecStations = ["el cerrito del norte", "el cerrito plaza"];
+        if (c === "el cerrito" && ecStations.indexOf(s) !== -1) return true;
+        
+        var sfStations = ["embarcadero", "montgomery", "powell", "civic center", "16th st mission", "24th st mission", "glen park", "balboa park"];
+        if (c === "san francisco" && sfStations.indexOf(s) !== -1) return true;
+        
+        if ((s === "dublin/pleasanton" || s === "west dublin/pleasanton") && (c === "dublin" || c === "pleasanton")) return true;
+        
+        return false;
+    }
+
     function getHighwayRoute(cityName) {
         return R[cityName] || null;
+    }
+
+    function getExtendedHighwayRoute(cityName) {
+        var route = R[cityName];
+        if (!route) return null;
+
+        var nearestStation = getNearestBartStation(cityName);
+        if (nearestStation && !isStationInCity(nearestStation, cityName)) {
+            // Check if we have a custom extension path
+            if (STATION_TO_CITY_EXTENSIONS[cityName] && STATION_TO_CITY_EXTENSIONS[cityName][nearestStation]) {
+                var ext = STATION_TO_CITY_EXTENSIONS[cityName][nearestStation];
+                return ext.concat(route);
+            }
+            // Fallback: prepend the nearest BART station coordinates directly
+            var stationCoords = BART_STATIONS[nearestStation];
+            if (stationCoords && (route.length === 0 || route[0][0] !== stationCoords[0] || route[0][1] !== stationCoords[1])) {
+                return [stationCoords].concat(route);
+            }
+        }
+        return route;
     }
 
     function getBartRoute(cityNameOrStationName) {
@@ -424,11 +483,13 @@ const OAKRoutes = (function () {
 
     return {
         getHighwayRoute: getHighwayRoute,
+        getExtendedHighwayRoute: getExtendedHighwayRoute,
         getBartRoute: getBartRoute,
         getNearestBartStation: getNearestBartStation,
         getBartStations: getBartStations,
         normalizeStationName: normalizeStationName,
         getDisplayStationName: getDisplayStationName,
+        isStationInCity: isStationInCity,
         OAK: OAK
     };
 })();

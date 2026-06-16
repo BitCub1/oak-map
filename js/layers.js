@@ -456,7 +456,7 @@ const OAKLayers = (function () {
         var offsetMeters = getOffsetDistanceInMeters(zoom);
 
         var bartRoute = OAKRoutes.getBartRoute(name);
-        var hwRoute = OAKRoutes.getHighwayRoute(name);
+        var hwRoute = OAKRoutes.getExtendedHighwayRoute(name);
         var stationIndices = [];
 
         // Align BART route coordinates to highway coordinates where they run in the same corridor

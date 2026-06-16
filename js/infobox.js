@@ -456,32 +456,7 @@ const OAKInfoBox = (function () {
         return Math.round(miles * 1.6) + 2;
     }
 
-    function isStationInCity(stationName, cityName) {
-        if (!stationName || !cityName) return false;
-        var s = OAKRoutes.normalizeStationName(stationName).toLowerCase();
-        var c = cityName.toLowerCase();
-        
-        if (s.indexOf(c) !== -1 || c.indexOf(s) !== -1) return true;
-        
-        if (s === "berryessa" && c === "san jose") return true;
-        if (s === "bay fair" && c === "san leandro") return true;
-        
-        var oaklandStations = ["macarthur", "fruitvale", "coliseum", "lake merritt", "rockridge", "west oakland", "12th st oakland", "19th st oakland", "oakland airport"];
-        if (c === "oakland" && oaklandStations.indexOf(s) !== -1) return true;
-        
-        var berkeleyStations = ["downtown berkeley", "north berkeley", "ashby"];
-        if (c === "berkeley" && berkeleyStations.indexOf(s) !== -1) return true;
-        
-        var ecStations = ["el cerrito del norte", "el cerrito plaza"];
-        if (c === "el cerrito" && ecStations.indexOf(s) !== -1) return true;
-        
-        var sfStations = ["embarcadero", "montgomery", "powell", "civic center", "16th st mission", "24th st mission", "glen park", "balboa park"];
-        if (c === "san francisco" && sfStations.indexOf(s) !== -1) return true;
-        
-        if ((s === "dublin/pleasanton" || s === "west dublin/pleasanton") && (c === "dublin" || c === "pleasanton")) return true;
-        
-        return false;
-    }
+
 
     function getDriveTimeToStation(cityName, stationName) {
         var route = OAKRoutes.getHighwayRoute(cityName);
@@ -518,7 +493,7 @@ const OAKInfoBox = (function () {
             var bartStr = bartTime + ' min BART transit';
             if (cityName) {
                 var stationName = OAKRoutes.getNearestBartStation(cityName);
-                if (stationName && !isStationInCity(stationName, cityName)) {
+                if (stationName && !OAKRoutes.isStationInCity(stationName, cityName)) {
                     var stationDriveTime = getDriveTimeToStation(cityName, stationName);
                     if (stationDriveTime !== null) {
                         var displayStationName = OAKRoutes.getDisplayStationName(stationName);
