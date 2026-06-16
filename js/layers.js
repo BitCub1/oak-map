@@ -210,6 +210,15 @@ const OAKLayers = (function () {
                             return L.latLng(37.7930, -122.3968);
                         };
                     }
+                } else if (name === 'Oakland') {
+                    layer.getBounds = function() {
+                        return L.latLngBounds([37.8044, -122.2711], [37.8044, -122.2711]);
+                    };
+                    if (typeof layer.getCenter === 'function') {
+                        layer.getCenter = function() {
+                            return L.latLng(37.8044, -122.2711);
+                        };
+                    }
                 }
 
                 // Landmark cities always show a permanent label
