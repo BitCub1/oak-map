@@ -626,6 +626,29 @@ const OAKRoutes = (function () {
         return R[cityName] || null;
     }
 
+    function getDist2(p1, p2) {
+        var dy = p1[0] - p2[0];
+        var dx = p1[1] - p2[1];
+        return dx * dx + dy * dy;
+    }
+
+    function projectPointOnSegment(p, a, b) {
+        var dy = b[0] - a[0];
+        var dx = b[1] - a[1];
+        var len2 = dx * dx + dy * dy;
+        if (len2 === 0) return { coords: a, t: 0, dist2: getDist2(p, a) };
+
+        var t = ((p[0] - a[0]) * dy + (p[1] - a[1]) * dx) / len2;
+        t = Math.max(0, Math.min(1, t));
+
+        var projCoords = [a[0] + t * dy, a[1] + t * dx];
+        return {
+            coords: projCoords,
+            t: t,
+            dist2: getDist2(p, projCoords)
+        };
+    }
+
     function getExtendedHighwayRoute(cityName) {
         var route = R[cityName];
         if (!route) return null;
@@ -643,6 +666,22 @@ const OAKRoutes = (function () {
                 var ext = STATION_TO_CITY_EXTENSIONS[cityName][nearestStation];
                 return ext.concat(route);
             }
+
+            // Check if the station is adjacent to any segment of the route (dist < 0.003 degrees)
+            var stationCoords = BART_STATIONS[nearestStation];
+            if (stationCoords && route.length > 0) {
+                var minSegDistSq = Infinity;
+                for (var j = 0; j < route.length - 1; j++) {
+                    var proj = projectPointOnSegment(stationCoords, route[j], route[j+1]);
+                    if (proj.dist2 < minSegDistSq) {
+                        minSegDistSq = proj.dist2;
+                    }
+                }
+                if (Math.sqrt(minSegDistSq) < 0.003) {
+                    return route;
+                }
+            }
+
             // Fallback: Connect the nearest BART station to the closest vertex on the highway route,
             // then trace backwards to the start of the route to ensure it follows actual road corridors.
             var stationCoords = BART_STATIONS[nearestStation];

@@ -154,63 +154,68 @@ h1, h2, h3, h4, h5, h6, label, button, input {
 
 /* City name tooltip */
 .city-tooltip {
-    background: #0a0a0a !important;
-    border: 1px solid #333 !important;
-    color: #ccc !important;
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
     font-family: 'Bahnschrift', 'Segoe UI', 'Arial', sans-serif !important;
-    font-size: 14px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
     letter-spacing: 0.1em !important;
-    padding: 3px 9px !important;
+    padding: 0 !important;
     box-shadow: none !important;
     white-space: nowrap;
     text-transform: uppercase;
     opacity: 1 !important;
+    text-shadow: 0 0 4px #000000, 0 0 6px #000000 !important;
 }
 
 /* Permanent label on selected cities */
 .city-tooltip--selected {
-    background: #F04A00 !important;
+    background: transparent !important;
     border: none !important;
-    color: #000 !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-    letter-spacing: 0.12em !important;
-    padding: 3px 9px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+    letter-spacing: 0.1em !important;
+    padding: 0 !important;
     text-transform: uppercase;
     opacity: 1 !important;
+    text-shadow: 0 0 4px #000000, 0 0 6px #000000 !important;
 }
 
 /* Permanent label on selected BART stations — same size as hover */
 .city-tooltip--bart-selected {
-    background: #F04A00 !important;
-    border: 1px solid #F04A00 !important;
-    color: #000 !important;
-    font-weight: normal !important;
-    font-size: 14px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
     letter-spacing: 0.1em !important;
-    padding: 3px 9px !important;
+    padding: 0 !important;
     text-transform: uppercase;
     opacity: 1 !important;
+    text-shadow: 0 0 4px #000000, 0 0 6px #000000 !important;
 }
 
 /* Landmark cities (SF, Oakland, Berkeley) — always visible reference labels */
 .city-tooltip--landmark {
-    font-size: 15px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.12em !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    letter-spacing: 0.1em !important;
     opacity: 1 !important;
 }
 
 /* OAK airport label — larger, full opacity, with airplane */
 .city-tooltip--oak {
-    background: #F04A00 !important;
+    background: transparent !important;
     border: none !important;
-    color: #000 !important;
-    font-weight: 900 !important;
-    font-size: 22px !important;
-    letter-spacing: 0.14em !important;
-    padding: 4px 12px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 28px !important;
+    letter-spacing: 0.1em !important;
+    padding: 0 !important;
     opacity: 1 !important;
+    text-shadow: 0 0 4px #000000, 0 0 6px #000000 !important;
 }
 
 .city-tooltip::before {
@@ -220,6 +225,9 @@ h1, h2, h3, h4, h5, h6, label, button, input {
 .leaflet-tooltip-pane .leaflet-tooltip {
     border-radius: 0 !important;
     opacity: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* BART Station Tooltip Styles */
@@ -237,13 +245,10 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     flex-shrink: 0;
 }
 
-.city-tooltip .bart-station-tooltip-icon path {
-    fill: #ffffff;
-}
-
+.city-tooltip .bart-station-tooltip-icon path,
 .city-tooltip--selected .bart-station-tooltip-icon path,
 .city-tooltip--bart-selected .bart-station-tooltip-icon path {
-    fill: #000000;
+    fill: #ffffff !important;
 }
 
 /* --- Info Box Panel --- */
@@ -804,10 +809,7 @@ body.map-recording * {
     cursor: none !important;
 }
 
-/* Hide non-selected hover tooltips during recording */
-body.map-recording .city-tooltip:not(.city-tooltip--selected) {
-    display: none !important;
-}
+
 
 /* Map Selection Ripple Animations */
 .map-ripple-icon {

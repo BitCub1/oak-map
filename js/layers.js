@@ -112,7 +112,7 @@ const OAKLayers = (function () {
         },
         routeHighlight: {
             highway: {
-                color: '#ffffff',
+                color: '#FFFF00',
                 weight: 3.5,
                 opacity: 1,
                 lineCap: 'round',
@@ -236,7 +236,6 @@ const OAKLayers = (function () {
 
                 // Hover effects
                 layer.on('mouseover', function () {
-                    if (document.body.classList.contains('map-recording')) return;
                     var sel = selectedCities.get(name);
                     if (!sel || sel.isStation) {
                         this.setStyle(STYLES.city.hover);
@@ -246,10 +245,10 @@ const OAKLayers = (function () {
                 });
 
                 layer.on('mouseout', function () {
-                    if (document.body.classList.contains('map-recording')) return;
                     var sel = selectedCities.get(name);
                     if (!sel || sel.isStation) {
-                        if (selectedCities.size === 0) {
+                        var isRecording = document.body.classList.contains('map-recording');
+                        if (selectedCities.size === 0 && !isRecording) {
                             this.setStyle(STYLES.city.default);
                         } else {
                             this.setStyle(STYLES.city.hidden);
@@ -272,7 +271,7 @@ const OAKLayers = (function () {
 
     function createCountyLayer(data) {
         countyLayer = L.geoJSON(data, {
-            style: function () { return STYLES.county; },
+            style: function () { return STYLES.countySelected; },
             onEachFeature: function (feature, layer) {
                 var rawName = feature.properties.NAME || feature.properties.name || '';
                 var name = rawName.replace(/ County$/i, '');
@@ -348,6 +347,10 @@ const OAKLayers = (function () {
                     clearSelection();
                     OAKInfoBox.showAirport();
                 });
+
+                if (typeof layer.getBounds === 'function') {
+                    addAirportRippleMarker(layer.getBounds().getCenter());
+                }
             }
         }).addTo(map);
     }
@@ -402,6 +405,8 @@ const OAKLayers = (function () {
         }
     }
 
+    var airportRippleMarker = null;
+
     // ---- Internal: Selection Animations (Motion Graphics) ----
     function addRippleMarker(latlng) {
         if (!map) return;
@@ -415,6 +420,20 @@ const OAKLayers = (function () {
             iconAnchor: [20, 20]
         });
         rippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane' }).addTo(map);
+    }
+
+    function addAirportRippleMarker(latlng) {
+        if (!map) return;
+        if (airportRippleMarker) {
+            map.removeLayer(airportRippleMarker);
+        }
+        var rippleIcon = L.divIcon({
+            className: 'map-ripple-icon',
+            html: '<div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-dot"></div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
+        airportRippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane' }).addTo(map);
     }
 
     function animatePolyline(polyline) {
@@ -744,7 +763,7 @@ const OAKLayers = (function () {
 
         // Reset county selection styles instead of removing it from the map
         if (countyLayer) {
-            countyLayer.setStyle(STYLES.county);
+            countyLayer.setStyle(STYLES.countySelected);
             countyLayer.bringToBack();
         }
         selectedCountyName = null;
