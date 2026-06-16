@@ -997,8 +997,25 @@ const OAKLayers = (function () {
             }
         }
 
+        function isTransbaySegment(p1, p2) {
+            return (p1[1] < -122.35 && p2[1] > -122.31) || (p2[1] < -122.35 && p1[1] > -122.31);
+        }
+
+        // Second pass: clear snaps for transbay segment endpoints
+        for (var i = 1; i < bartRoute.length; i++) {
+            if (isTransbaySegment(bartRoute[i-1], bartRoute[i])) {
+                snappedInfo[i-1] = null;
+                snappedInfo[i] = null;
+            }
+        }
+
+        var anyLeft = false;
+        for (var i = 0; i < snappedInfo.length; i++) {
+            if (snappedInfo[i] !== null) anyLeft = true;
+        }
+
         // If nothing snapped, return original route
-        if (!hasAnySnapped) {
+        if (!anyLeft) {
             var stationIndices = [];
             for (var i = 0; i < bartRoute.length; i++) {
                 stationIndices.push(i);
