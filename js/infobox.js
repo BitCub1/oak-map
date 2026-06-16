@@ -322,7 +322,7 @@ const OAKInfoBox = (function () {
         currentType = 'bayarea';
         currentName = 'bayarea';
 
-        var html = '<div class="info-name">SF Bay Area</div>';
+        var html = '<div class="info-name">San Francisco Bay Area</div>';
         html += '<div class="info-breadcrumb"><span class="bc-current">ECONOMIC MEGAREGION</span></div>';
 
         html += '<div class="info-section">';
