@@ -40,6 +40,7 @@ const OAKRoutes = (function () {
         "Walnut Creek": [37.9056, -122.0669],
         "Pleasant Hill": [37.9283, -122.0560],
         "Concord": [37.9738, -122.0297],
+        "North Concord/Martinez": [38.0030, -122.0244],
         "Pittsburg/Bay Point": [38.0189, -121.9452],
         "Pittsburg Center": [38.0176, -121.8894],
         "Antioch": [38.0040, -121.7816],
@@ -95,9 +96,10 @@ const OAKRoutes = (function () {
         "Walnut Creek": ["Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
         "Pleasant Hill": ["Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
         "Concord": ["Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
-        "Pittsburg/Bay Point": ["Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
-        "Pittsburg Center": ["Pittsburg/Bay Point", "Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
-        "Antioch": ["Pittsburg Center", "Pittsburg/Bay Point", "Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
+        "North Concord/Martinez": ["Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
+        "Pittsburg/Bay Point": ["North Concord/Martinez", "Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
+        "Pittsburg Center": ["Pittsburg/Bay Point", "North Concord/Martinez", "Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
+        "Antioch": ["Pittsburg Center", "Pittsburg/Bay Point", "North Concord/Martinez", "Concord", "Pleasant Hill", "Walnut Creek", "Lafayette", "Orinda", "Rockridge", "MacArthur", "19th St Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
         "West Oakland": ["12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
         "Embarcadero": ["West Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
         "Montgomery": ["Embarcadero", "West Oakland", "12th St Oakland", "Lake Merritt", "Fruitvale", "Coliseum"],
@@ -348,6 +350,76 @@ const OAKRoutes = (function () {
         }
     };
 
+    var STATION_BRANCH_EXTENSIONS = {
+        "Vacaville": {
+            "Pittsburg/Bay Point": [
+                [38.200, -122.120], // Cordelia
+                [38.150, -122.126], // I-680
+                [38.085, -122.115],
+                [38.046, -122.123], // Benicia-Martinez Bridge north
+                [38.026, -122.124], // Benicia-Martinez Bridge south
+                [38.008, -122.112], // CA-4 interchange
+                [38.003, -122.025],
+                [38.0189, -121.9452] // Pittsburg/Bay Point
+            ]
+        },
+        "Fairfield": {
+            "North Concord/Martinez": [
+                [38.200, -122.120],
+                [38.150, -122.126],
+                [38.085, -122.115],
+                [38.046, -122.123],
+                [38.026, -122.124],
+                [38.008, -122.112],
+                [38.0030, -122.0244]
+            ]
+        },
+        "Suisun City": {
+            "North Concord/Martinez": [
+                [38.200, -122.120],
+                [38.150, -122.126],
+                [38.085, -122.115],
+                [38.046, -122.123],
+                [38.026, -122.124],
+                [38.008, -122.112],
+                [38.0030, -122.0244]
+            ]
+        },
+        "Dixon": {
+            "Pittsburg Center": [
+                [38.200, -122.120],
+                [38.150, -122.126],
+                [38.085, -122.115],
+                [38.046, -122.123],
+                [38.026, -122.124],
+                [38.008, -122.112],
+                [38.003, -122.025],
+                [38.0189, -121.9452],
+                [38.0176, -121.8894]
+            ]
+        },
+        "Rio Vista": {
+            "Antioch": [
+                [38.176, -121.692], // Rio Vista start
+                [38.161, -121.690],
+                [38.090, -121.750],
+                [38.026, -121.751], // Antioch Bridge north
+                [38.013, -121.764], // Antioch Bridge south
+                [38.0040, -121.7816] // Antioch BART
+            ]
+        },
+        "Benicia": {
+            "North Concord/Martinez": [
+                [38.049, -122.157], // Benicia start
+                [38.053, -122.128], // I-780 / I-680
+                [38.046, -122.123], // Benicia-Martinez Bridge north
+                [38.026, -122.124], // Benicia-Martinez Bridge south
+                [38.008, -122.112], // CA-4 interchange
+                [38.0030, -122.0244] // North Concord/Martinez BART
+            ]
+        }
+    };
+
     function isStationInCity(stationName, cityName) {
         if (!stationName || !cityName) return false;
         var s = normalizeStationName(stationName).toLowerCase();
@@ -385,6 +457,12 @@ const OAKRoutes = (function () {
 
         var nearestStation = getNearestBartStation(cityName);
         if (nearestStation && !isStationInCity(nearestStation, cityName)) {
+            // Check if we have a custom branch extension (e.g. Solano county cities)
+            if (STATION_BRANCH_EXTENSIONS[cityName] && STATION_BRANCH_EXTENSIONS[cityName][nearestStation]) {
+                var branch = STATION_BRANCH_EXTENSIONS[cityName][nearestStation];
+                return [route, branch];
+            }
+
             // Check if we have a custom extension path
             if (STATION_TO_CITY_EXTENSIONS[cityName] && STATION_TO_CITY_EXTENSIONS[cityName][nearestStation]) {
                 var ext = STATION_TO_CITY_EXTENSIONS[cityName][nearestStation];
@@ -487,7 +565,7 @@ const OAKRoutes = (function () {
             "warm springs/south fremont": "Warm Springs",
             "oakland international airport": "Oakland Airport",
             "pittsburg/bay point transfer": "Pittsburg/Bay Point",
-            "north concord/martinez": "Concord",
+            "north concord/martinez": "North Concord/Martinez",
             "san francisco international airport": "San Francisco International Airport"
         };
         
