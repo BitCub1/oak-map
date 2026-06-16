@@ -463,7 +463,17 @@ const OAKInfoBox = (function () {
             totalMeters += p1.distanceTo(p2);
         }
         var miles = totalMeters / 1609.34;
-        return Math.round(miles * 1.6) + 2;
+        var bartTime = Math.round(miles * 1.6) + 2;
+
+        var stationName = OAKRoutes.getNearestBartStation(cityName);
+        if (stationName && !OAKRoutes.isStationInCity(stationName, cityName)) {
+            var driveTime = getDriveTimeToStation(cityName, stationName);
+            if (driveTime !== null) {
+                bartTime += driveTime;
+            }
+        }
+
+        return bartTime;
     }
 
     function getDynamicCityDrivingData(cityName) {
@@ -536,7 +546,7 @@ const OAKInfoBox = (function () {
                     var stationDriveTime = getDriveTimeToStation(cityName, stationName);
                     if (stationDriveTime !== null) {
                         var displayStationName = OAKRoutes.getDisplayStationName(stationName);
-                        bartStr += ' (' + stationDriveTime + ' min drive to ' + displayStationName + ' Station)';
+                        bartStr += ' (' + stationDriveTime + ' min to ' + displayStationName + ' Station)';
                     }
                 }
             }
