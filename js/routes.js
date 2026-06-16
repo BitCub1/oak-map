@@ -373,10 +373,30 @@ const OAKRoutes = (function () {
                 var ext = STATION_TO_CITY_EXTENSIONS[cityName][nearestStation];
                 return ext.concat(route);
             }
-            // Fallback: prepend the nearest BART station coordinates directly
+            // Fallback: Connect the nearest BART station to the closest vertex on the highway route,
+            // then trace backwards to the start of the route to ensure it follows actual road corridors.
             var stationCoords = BART_STATIONS[nearestStation];
-            if (stationCoords && (route.length === 0 || route[0][0] !== stationCoords[0] || route[0][1] !== stationCoords[1])) {
-                return [stationCoords].concat(route);
+            if (stationCoords && route.length > 0) {
+                var minD = Infinity;
+                var closestIdx = 0;
+                for (var i = 0; i < route.length; i++) {
+                    var dy = route[i][0] - stationCoords[0];
+                    var dx = route[i][1] - stationCoords[1];
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < minD) {
+                        minD = dist;
+                        closestIdx = i;
+                    }
+                }
+                
+                var extended = [stationCoords];
+                for (var i = closestIdx; i >= 0; i--) {
+                    extended.push(route[i]);
+                }
+                for (var i = 0; i < route.length; i++) {
+                    extended.push(route[i]);
+                }
+                return extended;
             }
         }
         return route;
