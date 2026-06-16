@@ -449,17 +449,14 @@ const OAKLayers = (function () {
 
     // ---- Internal: Selection Animations (Motion Graphics) ----
     function addRippleMarker(latlng) {
-        if (!map) return;
-        if (rippleMarker) {
-            map.removeLayer(rippleMarker);
-        }
+        if (!map) return null;
         var rippleIcon = L.divIcon({
             className: 'map-ripple-icon',
             html: '<div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-dot"></div>',
             iconSize: [40, 40],
             iconAnchor: [20, 20]
         });
-        rippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane', zIndexOffset: 2000 }).addTo(map);
+        return L.marker(latlng, { icon: rippleIcon, pane: 'markerPane', zIndexOffset: 2000 }).addTo(map);
     }
 
     function addAirportRippleMarker(latlng) {
@@ -545,8 +542,9 @@ const OAKLayers = (function () {
         layer.openTooltip();
 
         // Add pulsing ripple marker at city centroid
+        var cityRipple = null;
         if (layer && typeof layer.getBounds === 'function') {
-            addRippleMarker(layer.getBounds().getCenter());
+            cityRipple = addRippleMarker(layer.getBounds().getCenter());
         }
 
         // Build per-city route layers — BART first, highway on top
@@ -612,7 +610,8 @@ const OAKLayers = (function () {
             hwRoute: hwRoute,
             bartRoute: bartRoute,
             stationMarkers: stationMarkers,
-            stationIndices: stationIndices
+            stationIndices: stationIndices,
+            rippleMarker: cityRipple
         });
 
         updateCityBorders();
@@ -658,6 +657,9 @@ const OAKLayers = (function () {
         if (sel.bartLayer) map.removeLayer(sel.bartLayer);
         if (sel.stationMarkers) {
             sel.stationMarkers.forEach(function (m) { map.removeLayer(m); });
+        }
+        if (sel.rippleMarker) {
+            map.removeLayer(sel.rippleMarker);
         }
 
         selectedCities.delete(name);
@@ -706,7 +708,7 @@ const OAKLayers = (function () {
                 }
             });
             if (countyFeatureLayer && typeof countyFeatureLayer.getBounds === 'function') {
-                addRippleMarker(countyFeatureLayer.getBounds().getCenter());
+                rippleMarker = addRippleMarker(countyFeatureLayer.getBounds().getCenter());
             }
         }
 
@@ -731,7 +733,7 @@ const OAKLayers = (function () {
         var selectedCoords = bartRoute[0];
         
         // Add pulsing ripple marker at station coordinate
-        addRippleMarker(selectedCoords);
+        rippleMarker = addRippleMarker(selectedCoords);
 
         var marker = L.marker(selectedCoords, {
             icon: L.divIcon({
@@ -795,6 +797,9 @@ const OAKLayers = (function () {
             if (sel.bartLayer) map.removeLayer(sel.bartLayer);
             if (sel.stationMarkers) {
                 sel.stationMarkers.forEach(function (m) { map.removeLayer(m); });
+            }
+            if (sel.rippleMarker) {
+                map.removeLayer(sel.rippleMarker);
             }
             if (sel.isStation) {
                 sel.layer.unbindTooltip();
