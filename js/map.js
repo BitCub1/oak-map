@@ -7,8 +7,8 @@ const OAKMap = (function () {
     let map = null;
     let minZoomCalculated = 8;
 
-    // Bay Area center (slightly biased toward OAK)
-    const BAY_AREA_CENTER = [37.76, -122.18];
+    // Bay Area center (centered on OAK)
+    const BAY_AREA_CENTER = [37.7213, -122.2208];
     const DEFAULT_ZOOM = 10;
     const MIN_ZOOM = 8;
     const MAX_ZOOM = 16;
