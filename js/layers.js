@@ -392,9 +392,21 @@ const OAKLayers = (function () {
 
     function updateCountyVisibility() {
         if (!countyLayer) return;
-        var hasSelection = selectedCities.size > 0 || selectedCountyName !== null;
-        if (hasSelection) {
+        var hasCityOrStationSelection = selectedCities.size > 0;
+        var hasCountySelection = selectedCountyName !== null;
+
+        if (hasCityOrStationSelection) {
             countyLayer.setStyle(STYLES.countyHidden);
+        } else if (hasCountySelection) {
+            countyLayer.setStyle(function (feature) {
+                var rawName = feature.properties.NAME || feature.properties.name || '';
+                var featureCountyName = rawName.replace(/ County$/i, '');
+                if (featureCountyName === selectedCountyName) {
+                    return STYLES.countySelected;
+                } else {
+                    return STYLES.countyHidden;
+                }
+            });
         } else {
             countyLayer.setStyle(STYLES.countySelected);
         }
@@ -631,7 +643,7 @@ const OAKLayers = (function () {
         selectedCountyName = name;
 
         if (countyLayer) {
-            countyLayer.setStyle(STYLES.countyHidden);
+            updateCountyVisibility();
             if (!map.hasLayer(countyLayer)) {
                 countyLayer.addTo(map);
             }
