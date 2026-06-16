@@ -201,6 +201,21 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     opacity: 1 !important;
 }
 
+/* BART Station Tooltip Styles */
+.bart-station-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+}
+
+.bart-station-tooltip-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
 /* --- Info Box Panel --- */
 #info-box {
     position: fixed;
