@@ -29,13 +29,15 @@ const OAKRecorder = (function () {
         const recordBtn = document.getElementById('record-btn');
         try {
             // Request display media for tab, window or screen with 4K preference
+            // preferCurrentTab is highly recommended for Region Capture (CropTarget)
             stream = await navigator.mediaDevices.getDisplayMedia({
                 video: {
                     width: { ideal: 3840, max: 3840 },
                     height: { ideal: 2160, max: 2160 },
                     frameRate: { ideal: 60, max: 60 }
                 },
-                audio: false
+                audio: false,
+                preferCurrentTab: true
             });
 
             // Set up MediaRecorder
@@ -49,6 +51,23 @@ const OAKRecorder = (function () {
             }
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 options = { mimeType: 'video/mp4' };
+            }
+
+            // Apply CropTarget if supported (Region Capture API)
+            // This crops the video stream to `#map-container` (the entire map area)
+            if (typeof CropTarget !== 'undefined' && typeof CropTarget.fromElement === 'function') {
+                const mapContainer = document.getElementById('map-container');
+                if (mapContainer) {
+                    try {
+                        const cropTarget = await CropTarget.fromElement(mapContainer);
+                        const [track] = stream.getVideoTracks();
+                        if (track && typeof track.cropTo === 'function') {
+                            await track.cropTo(cropTarget);
+                        }
+                    } catch (cropErr) {
+                        console.warn('Region Capture (CropTarget) failed or not supported:', cropErr);
+                    }
+                }
             }
 
             mediaRecorder = new MediaRecorder(stream, {
@@ -77,6 +96,11 @@ const OAKRecorder = (function () {
                 recordBtn.innerHTML = 'RECORDING 00:00';
             }
             document.body.classList.add('map-recording');
+
+            // Hide unselected city borders on map during recording
+            if (typeof OAKLayers !== 'undefined' && typeof OAKLayers.updateCityBorders === 'function') {
+                OAKLayers.updateCityBorders();
+            }
 
             // Handle when user stops sharing via browser bar
             if (stream && stream.getVideoTracks().length > 0) {
@@ -124,6 +148,11 @@ const OAKRecorder = (function () {
             recordBtn.innerHTML = 'RECORD';
         }
         document.body.classList.remove('map-recording');
+
+        // Restore city borders on map
+        if (typeof OAKLayers !== 'undefined' && typeof OAKLayers.updateCityBorders === 'function') {
+            OAKLayers.updateCityBorders();
+        }
     }
 
     function saveRecording() {

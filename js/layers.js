@@ -223,6 +223,7 @@ const OAKLayers = (function () {
 
                 // Hover effects
                 layer.on('mouseover', function () {
+                    if (document.body.classList.contains('map-recording')) return;
                     var sel = selectedCities.get(name);
                     if (!sel || sel.isStation) {
                         this.setStyle(STYLES.city.hover);
@@ -232,6 +233,7 @@ const OAKLayers = (function () {
                 });
 
                 layer.on('mouseout', function () {
+                    if (document.body.classList.contains('map-recording')) return;
                     var sel = selectedCities.get(name);
                     if (!sel || sel.isStation) {
                         if (selectedCities.size === 0) {
@@ -353,13 +355,14 @@ const OAKLayers = (function () {
     function updateCityBorders() {
         if (!cityLayer) return;
         var hasSelection = selectedCities.size > 0;
+        var isRecording = document.body.classList.contains('map-recording');
         cityLayer.eachLayer(function (l) {
             var name = l.feature.properties.NAME || l.feature.properties.name || '';
             var sel = selectedCities.get(name);
             if (sel && !sel.isStation) {
                 l.setStyle(STYLES.city.selected);
             } else {
-                if (hasSelection) {
+                if (hasSelection || isRecording) {
                     l.setStyle(STYLES.city.hidden);
                 } else {
                     l.setStyle(STYLES.city.default);
@@ -409,7 +412,7 @@ const OAKLayers = (function () {
                 path.style.strokeDasharray = length;
                 path.style.strokeDashoffset = length;
                 path.getBoundingClientRect(); // force reflow
-                path.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                path.style.transition = 'stroke-dashoffset 3.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
                 path.style.strokeDashoffset = '0';
                 
                 // Clean up transition styles after animation completes so zooming/panning works normally
@@ -419,7 +422,7 @@ const OAKLayers = (function () {
                         path.style.strokeDasharray = '';
                         path.style.strokeDashoffset = '';
                     }
-                }, 1600);
+                }, 3600);
             }
         }, 50);
     }
@@ -1005,7 +1008,8 @@ const OAKLayers = (function () {
         clearSelection: clearSelection,
         toggleLayer: toggleLayer,
         showRouteToOAK: showRouteToOAK,
-        clearRouteHighlights: clearRouteHighlights
+        clearRouteHighlights: clearRouteHighlights,
+        updateCityBorders: updateCityBorders
     };
 })();
 
