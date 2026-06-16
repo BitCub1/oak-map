@@ -5,6 +5,7 @@
 
 const OAKMap = (function () {
     let map = null;
+    let minZoomCalculated = 8;
 
     // Bay Area center (slightly biased toward OAK)
     const BAY_AREA_CENTER = [37.76, -122.18];
@@ -31,8 +32,13 @@ const OAKMap = (function () {
 
         // Lock min zoom dynamically to whatever fitBounds calculated so user cannot zoom out further
         const currentZoom = map.getZoom();
+        minZoomCalculated = currentZoom;
         map.setMinZoom(currentZoom);
         map.setMaxZoom(MAX_ZOOM);
+
+        // Adjust to 2 zoom levels closer for default start view
+        map.setZoom(currentZoom + 2);
+        map.panTo(BAY_AREA_CENTER, { animate: false });
 
         // Create custom panes for z-ordering
         // tooltipPane is z-index 650, so airport must be below that
@@ -76,11 +82,7 @@ const OAKMap = (function () {
     }
 
     function resetView() {
-        const bounds = L.latLngBounds(
-            [37.1, -123.0],  // SW
-            [38.9, -121.2]   // NE
-        );
-        map.flyToBounds(bounds, { duration: 0.5 });
+        map.flyTo(BAY_AREA_CENTER, minZoomCalculated + 2, { duration: 0.5 });
     }
 
     return {
