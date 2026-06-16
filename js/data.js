@@ -46,15 +46,15 @@ const CITY_DATA = {
     "Clayton":        { pop: 10798, county: "Contra Costa", sub: "East Bay", emp: ["City of Clayton", "Mt. Diablo USD"], dist: 31, time: 36 },
 
     // === SAN FRANCISCO COUNTY (Peninsula) ===
-    "San Francisco":  { pop: 825000, county: "San Francisco", sub: "Peninsula", emp: ["City & County of SF", "UCSF", "Salesforce", "SF Unified School District", "Sutter Health"], dist: 17, time: 21 },
+    "San Francisco":  { pop: 825000, county: "San Francisco", sub: "Peninsula", emp: ["City & County of SF", "UCSF", "Salesforce", "SF Unified School District", "Sutter Health"], dist: 19, time: 22 },
 
     // === SAN MATEO COUNTY (Peninsula) ===
     "San Mateo":      { pop: 104000, county: "San Mateo", sub: "Peninsula", emp: ["Franklin Templeton (HQ)", "Fisher Investments", "Snowflake", "San Mateo-Foster City SD", "City of San Mateo"], dist: 28, time: 32 },
-    "Daly City":      { pop: 103000, county: "San Mateo", sub: "Peninsula", emp: ["Seton Medical Center", "Jefferson ESD", "Genesys Telecommunications", "Serramonte Center", "City of Daly City"], dist: 25, time: 29 },
+    "Daly City":      { pop: 103000, county: "San Mateo", sub: "Peninsula", emp: ["Seton Medical Center", "Jefferson ESD", "Genesys Telecommunications", "Serramonte Center", "City of Daly City"], dist: 26, time: 31 },
     "Redwood City":   { pop: 84000, county: "San Mateo", sub: "Peninsula", emp: ["Oracle", "Electronic Arts", "Kaiser Permanente", "Informatica", "Box Inc."], dist: 37, time: 43 },
-    "South San Francisco": { pop: 66000, county: "San Mateo", sub: "Peninsula", emp: ["Genentech", "Kaiser Permanente", "SSF USD", "Amgen", "City of South San Francisco"], dist: 26, time: 31 },
-    "San Bruno":      { pop: 43000, county: "San Mateo", sub: "Peninsula", emp: ["YouTube/Google (HQ)", "Walmart.com", "San Bruno Park SD", "City of San Bruno"], dist: 28, time: 32 },
-    "Pacifica":       { pop: 37500, county: "San Mateo", sub: "Peninsula", emp: ["City of Pacifica", "Pacifica SD"], dist: 30, time: 35 },
+    "South San Francisco": { pop: 66000, county: "San Mateo", sub: "Peninsula", emp: ["Genentech", "Kaiser Permanente", "SSF USD", "Amgen", "City of South San Francisco"], dist: 27, time: 32 },
+    "San Bruno":      { pop: 43000, county: "San Mateo", sub: "Peninsula", emp: ["YouTube/Google (HQ)", "Walmart.com", "San Bruno Park SD", "City of San Bruno"], dist: 29, time: 34 },
+    "Pacifica":       { pop: 37500, county: "San Mateo", sub: "Peninsula", emp: ["City of Pacifica", "Pacifica SD"], dist: 31, time: 36 },
     "Foster City":    { pop: 33000, county: "San Mateo", sub: "Peninsula", emp: ["Gilead Sciences", "Visa (US HQ)", "Zoox", "Illumina", "City of Foster City"], dist: 25, time: 30 },
     "Menlo Park":     { pop: 33000, county: "San Mateo", sub: "Peninsula", emp: ["Meta/Facebook (HQ)", "SLAC National Accelerator Lab", "SRI International", "VA Palo Alto Health Care", "Menlo Park City SD"], dist: 35, time: 41 },
     "Burlingame":     { pop: 31500, county: "San Mateo", sub: "Peninsula", emp: ["City of Burlingame", "Burlingame SD", "Hyatt Hotels", "Virgin Atlantic"], dist: 29, time: 33 },
@@ -66,9 +66,9 @@ const CITY_DATA = {
     "Hillsborough":   { pop: 11200, county: "San Mateo", sub: "Peninsula", emp: ["Hillsborough City SD", "City of Hillsborough"], dist: 29, time: 33 },
     "Atherton":       { pop: 7000, county: "San Mateo", sub: "Peninsula", emp: ["Menlo School", "Sacred Heart Schools"], dist: 36, time: 41 },
     "Woodside":       { pop: 5200, county: "San Mateo", sub: "Peninsula", emp: ["Woodside ESD", "Town of Woodside"], dist: 40, time: 45 },
-    "Brisbane":       { pop: 4800, county: "San Mateo", sub: "Peninsula", emp: ["Sierra Point biotech cluster", "City of Brisbane", "Brisbane SD"], dist: 24, time: 29 },
+    "Brisbane":       { pop: 4800, county: "San Mateo", sub: "Peninsula", emp: ["Sierra Point biotech cluster", "City of Brisbane", "Brisbane SD"], dist: 26, time: 30 },
     "Portola Valley": { pop: 4400, county: "San Mateo", sub: "Peninsula", emp: ["Portola Valley SD", "Town of Portola Valley"], dist: 43, time: 49 },
-    "Colma":          { pop: 1400, county: "San Mateo", sub: "Peninsula", emp: ["Costco", "Home Depot", "Target", "Town of Colma"], dist: 26, time: 30 },
+    "Colma":          { pop: 1400, county: "San Mateo", sub: "Peninsula", emp: ["Costco", "Home Depot", "Target", "Town of Colma"], dist: 27, time: 32 },
 
     // === SANTA CLARA COUNTY (South Bay) ===
     "San Jose":       { pop: 997368, county: "Santa Clara", sub: "South Bay", emp: ["Cisco Systems", "Adobe", "City of San Jose", "PayPal", "Western Digital"], dist: 36, time: 41 },
@@ -88,17 +88,17 @@ const CITY_DATA = {
     "Monte Sereno":   { pop: 3563, county: "Santa Clara", sub: "South Bay", emp: ["City of Monte Sereno"], dist: 45, time: 51 },
 
     // === MARIN COUNTY (North Bay) ===
-    "San Rafael":     { pop: 59700, county: "Marin", sub: "North Bay", emp: ["Autodesk (HQ)", "County of Marin", "MarinHealth", "San Rafael City Schools", "City of San Rafael"], dist: 37, time: 42 },
-    "Novato":         { pop: 52100, county: "Marin", sub: "North Bay", emp: ["Ultragenyx Pharmaceutical", "Novato USD", "BioMarin (nearby)", "City of Novato", "Buck Institute for Research on Aging"], dist: 44, time: 50 },
-    "Mill Valley":    { pop: 13900, county: "Marin", sub: "North Bay", emp: ["Mill Valley SD", "City of Mill Valley", "Tam USD"], dist: 33, time: 38 },
-    "Larkspur":       { pop: 12700, county: "Marin", sub: "North Bay", emp: ["City of Larkspur", "Marin General Hospital (nearby)"], dist: 34, time: 39 },
-    "San Anselmo":    { pop: 12600, county: "Marin", sub: "North Bay", emp: ["Ross Valley SD", "Town of San Anselmo"], dist: 37, time: 42 },
-    "Corte Madera":   { pop: 10000, county: "Marin", sub: "North Bay", emp: ["Town Center Corte Madera", "Town of Corte Madera"], dist: 33, time: 38 },
-    "Tiburon":        { pop: 8950, county: "Marin", sub: "North Bay", emp: ["Reed Union SD", "Town of Tiburon"], dist: 30, time: 35 },
-    "Fairfax":        { pop: 7450, county: "Marin", sub: "North Bay", emp: ["Town of Fairfax", "Ross Valley SD"], dist: 39, time: 44 },
-    "Sausalito":      { pop: 7100, county: "Marin", sub: "North Bay", emp: ["US Army Corps of Engineers", "City of Sausalito", "Sausalito Marin City SD"], dist: 27, time: 32 },
-    "Ross":           { pop: 2450, county: "Marin", sub: "North Bay", emp: ["Ross SD", "Town of Ross"], dist: 37, time: 42 },
-    "Belvedere":      { pop: 2200, county: "Marin", sub: "North Bay", emp: ["City of Belvedere"], dist: 30, time: 35 },
+    "San Rafael":     { pop: 59700, county: "Marin", sub: "North Bay", emp: ["Autodesk (HQ)", "County of Marin", "MarinHealth", "San Rafael City Schools", "City of San Rafael"], dist: 38, time: 43 },
+    "Novato":         { pop: 52100, county: "Marin", sub: "North Bay", emp: ["Ultragenyx Pharmaceutical", "Novato USD", "BioMarin (nearby)", "City of Novato", "Buck Institute for Research on Aging"], dist: 46, time: 52 },
+    "Mill Valley":    { pop: 13900, county: "Marin", sub: "North Bay", emp: ["Mill Valley SD", "City of Mill Valley", "Tam USD"], dist: 34, time: 39 },
+    "Larkspur":       { pop: 12700, county: "Marin", sub: "North Bay", emp: ["City of Larkspur", "Marin General Hospital (nearby)"], dist: 35, time: 40 },
+    "San Anselmo":    { pop: 12600, county: "Marin", sub: "North Bay", emp: ["Ross Valley SD", "Town of San Anselmo"], dist: 38, time: 44 },
+    "Corte Madera":   { pop: 10000, county: "Marin", sub: "North Bay", emp: ["Town Center Corte Madera", "Town of Corte Madera"], dist: 34, time: 39 },
+    "Tiburon":        { pop: 8950, county: "Marin", sub: "North Bay", emp: ["Reed Union SD", "Town of Tiburon"], dist: 31, time: 36 },
+    "Fairfax":        { pop: 7450, county: "Marin", sub: "North Bay", emp: ["Town of Fairfax", "Ross Valley SD"], dist: 40, time: 46 },
+    "Sausalito":      { pop: 7100, county: "Marin", sub: "North Bay", emp: ["US Army Corps of Engineers", "City of Sausalito", "Sausalito Marin City SD"], dist: 29, time: 33 },
+    "Ross":           { pop: 2450, county: "Marin", sub: "North Bay", emp: ["Ross SD", "Town of Ross"], dist: 38, time: 43 },
+    "Belvedere":      { pop: 2200, county: "Marin", sub: "North Bay", emp: ["City of Belvedere"], dist: 31, time: 36 },
 
     // === NAPA COUNTY (North Bay) ===
     "Napa":           { pop: 76921, county: "Napa", sub: "North Bay", emp: ["Queen of the Valley Medical Center", "Napa State Hospital", "Napa County", "Treasury Wine Estates", "Napa Valley USD"], dist: 48, time: 55 },
@@ -117,15 +117,15 @@ const CITY_DATA = {
     "Rio Vista":      { pop: 10248, county: "Solano", sub: "North Bay", emp: ["City of Rio Vista", "River Delta USD"], dist: 69, time: 78 },
 
     // === SONOMA COUNTY (North Bay) ===
-    "Santa Rosa":     { pop: 178500, county: "Sonoma", sub: "North Bay", emp: ["Keysight Technologies", "Kaiser Permanente", "County of Sonoma", "St. Joseph Health", "Santa Rosa Junior College"], dist: 71, time: 79 },
-    "Petaluma":       { pop: 59688, county: "Sonoma", sub: "North Bay", emp: ["Petaluma City Schools", "Petaluma Health Center", "Lagunitas Brewing", "City of Petaluma", "Amy's Kitchen"], dist: 57, time: 65 },
-    "Rohnert Park":   { pop: 44811, county: "Sonoma", sub: "North Bay", emp: ["Sonoma State University", "Graton Resort & Casino", "Cotati-Rohnert Park USD", "City of Rohnert Park"], dist: 64, time: 72 },
-    "Windsor":        { pop: 25864, county: "Sonoma", sub: "North Bay", emp: ["Windsor USD", "Town of Windsor", "Jackson Family Wines"], dist: 80, time: 89 },
-    "Healdsburg":     { pop: 11172, county: "Sonoma", sub: "North Bay", emp: ["Healdsburg USD", "City of Healdsburg"], dist: 85, time: 95 },
-    "Sonoma":         { pop: 10537, county: "Sonoma", sub: "North Bay", emp: ["Sonoma Valley USD", "Sonoma Valley Hospital", "City of Sonoma"], dist: 68, time: 76 },
-    "Cloverdale":     { pop: 8701, county: "Sonoma", sub: "North Bay", emp: ["Cloverdale USD", "City of Cloverdale"], dist: 101, time: 112 },
-    "Sebastopol":     { pop: 7532, county: "Sonoma", sub: "North Bay", emp: ["Sebastopol Union SD", "City of Sebastopol", "The Barlow"], dist: 73, time: 81 },
-    "Cotati":         { pop: 7347, county: "Sonoma", sub: "North Bay", emp: ["Cotati-Rohnert Park USD", "City of Cotati"], dist: 65, time: 73 }
+    "Santa Rosa":     { pop: 178500, county: "Sonoma", sub: "North Bay", emp: ["Keysight Technologies", "Kaiser Permanente", "County of Sonoma", "St. Joseph Health", "Santa Rosa Junior College"], dist: 72, time: 80 },
+    "Petaluma":       { pop: 59688, county: "Sonoma", sub: "North Bay", emp: ["Petaluma City Schools", "Petaluma Health Center", "Lagunitas Brewing", "City of Petaluma", "Amy's Kitchen"], dist: 59, time: 66 },
+    "Rohnert Park":   { pop: 44811, county: "Sonoma", sub: "North Bay", emp: ["Sonoma State University", "Graton Resort & Casino", "Cotati-Rohnert Park USD", "City of Rohnert Park"], dist: 65, time: 73 },
+    "Windsor":        { pop: 25864, county: "Sonoma", sub: "North Bay", emp: ["Windsor USD", "Town of Windsor", "Jackson Family Wines"], dist: 81, time: 90 },
+    "Healdsburg":     { pop: 11172, county: "Sonoma", sub: "North Bay", emp: ["Healdsburg USD", "City of Healdsburg"], dist: 86, time: 96 },
+    "Sonoma":         { pop: 10537, county: "Sonoma", sub: "North Bay", emp: ["Sonoma Valley USD", "Sonoma Valley Hospital", "City of Sonoma"], dist: 69, time: 77 },
+    "Cloverdale":     { pop: 8701, county: "Sonoma", sub: "North Bay", emp: ["Cloverdale USD", "City of Cloverdale"], dist: 102, time: 113 },
+    "Sebastopol":     { pop: 7532, county: "Sonoma", sub: "North Bay", emp: ["Sebastopol Union SD", "City of Sebastopol", "The Barlow"], dist: 74, time: 83 },
+    "Cotati":         { pop: 7347, county: "Sonoma", sub: "North Bay", emp: ["Cotati-Rohnert Park USD", "City of Cotati"], dist: 66, time: 74 }
 };
 
 

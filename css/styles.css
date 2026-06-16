@@ -180,6 +180,19 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     opacity: 1 !important;
 }
 
+/* Permanent label on selected BART stations — same size as hover */
+.city-tooltip--bart-selected {
+    background: #F04A00 !important;
+    border: 1px solid #F04A00 !important;
+    color: #000 !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
+    letter-spacing: 0.1em !important;
+    padding: 3px 9px !important;
+    text-transform: uppercase;
+    opacity: 1 !important;
+}
+
 /* Landmark cities (SF, Oakland, Berkeley) — always visible reference labels */
 .city-tooltip--landmark {
     font-size: 15px !important;
@@ -228,7 +241,8 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     fill: #ffffff;
 }
 
-.city-tooltip--selected .bart-station-tooltip-icon path {
+.city-tooltip--selected .bart-station-tooltip-icon path,
+.city-tooltip--bart-selected .bart-station-tooltip-icon path {
     fill: #000000;
 }
 

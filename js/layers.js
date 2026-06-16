@@ -540,7 +540,16 @@ const OAKLayers = (function () {
         if (!sel) return;
 
         // Restore tooltip — landmarks keep permanent label, others go back to hover
-        if (LANDMARK_CITIES[name]) {
+        if (sel.isStation) {
+            sel.layer.unbindTooltip();
+            var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name + '</span>';
+            sel.layer.bindTooltip(labelHtml, {
+                className: 'city-tooltip',
+                direction: 'top',
+                offset: [0, -8],
+                opacity: 1
+            });
+        } else if (LANDMARK_CITIES[name]) {
             bindLandmarkTooltip(name, sel.layer);
         } else {
             sel.layer.unbindTooltip();
@@ -645,16 +654,16 @@ const OAKLayers = (function () {
         var marker = L.marker(selectedCoords, {
             icon: L.divIcon({
                 className: 'bart-station-icon-square',
-                iconSize: [12, 12],
-                iconAnchor: [6, 6]
+                iconSize: [10, 10],
+                iconAnchor: [5, 5]
             }),
             pane: 'markerPane'
         });
-        var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + stationName.toUpperCase() + '</span>';
+        var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + stationName + '</span>';
         marker.bindTooltip(labelHtml, {
-            className: 'city-tooltip city-tooltip--selected',
+            className: 'city-tooltip city-tooltip--bart-selected',
             direction: 'top',
-            offset: [0, -6],
+            offset: [0, -8],
             permanent: true,
             opacity: 1
         });
@@ -705,7 +714,16 @@ const OAKLayers = (function () {
             if (sel.stationMarkers) {
                 sel.stationMarkers.forEach(function (m) { map.removeLayer(m); });
             }
-            if (LANDMARK_CITIES[name]) {
+            if (sel.isStation) {
+                sel.layer.unbindTooltip();
+                var labelHtml = '<span class="bart-station-label">' + BART_ICON_SVG + ' ' + name + '</span>';
+                sel.layer.bindTooltip(labelHtml, {
+                    className: 'city-tooltip',
+                    direction: 'top',
+                    offset: [0, -8],
+                    opacity: 1
+                });
+            } else if (LANDMARK_CITIES[name]) {
                 bindLandmarkTooltip(name, sel.layer);
             } else {
                 sel.layer.unbindTooltip();
