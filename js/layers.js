@@ -113,14 +113,14 @@ const OAKLayers = (function () {
         routeHighlight: {
             highway: {
                 color: '#FDB515',
-                weight: 3.5,
+                weight: 4.5,
                 opacity: 1,
                 lineCap: 'round',
                 lineJoin: 'round'
             },
             bart: {
                 color: '#3B82F6',
-                weight: 3.5,
+                weight: 4.5,
                 opacity: 1,
                 lineCap: 'round',
                 lineJoin: 'round'
@@ -350,7 +350,7 @@ const OAKLayers = (function () {
             style: function () { return STYLES.airport; },
             pane: 'airportPane',
             onEachFeature: function (feature, layer) {
-                layer.bindTooltip('&#x2708;&#xFE0E;OAK', {
+                layer.bindTooltip('<span class="oak-airplane">&#x2708;&#xFE0E;</span>OAK', {
                     className: 'city-tooltip city-tooltip--oak',
                     direction: 'top',
                     permanent: true,
@@ -550,7 +550,7 @@ const OAKLayers = (function () {
 
         var offsetBartRoute = [];
         if (bartRoute && bartRoute.length >= 2) {
-            offsetBartRoute = offsetPolyline(bartRoute, -offsetMeters);
+            offsetBartRoute = offsetPolyline(bartRoute, -offsetMeters, mainHwRoute);
             bartLayer = L.polyline(offsetBartRoute, Object.assign({}, STYLES.routeHighlight.bart, {pane: 'routePane'}));
             var bartCheckbox = document.getElementById('layer-bart');
             var bartChecked = bartCheckbox ? bartCheckbox.checked : true;
@@ -865,19 +865,42 @@ const OAKLayers = (function () {
     // ================================================================
 
     function getOffsetDistanceInMeters(zoom) {
-        // Desired visual offset: exactly half of route line weight (3.5px / 2 = 1.75px)
+        // Desired visual offset: exactly half of route line weight (4.5px / 2 = 2.25px)
         // This ensures the two parallel lines touch side-by-side with no gap and no overlap.
-        var desiredPixelOffset = 1.75;
+        var desiredPixelOffset = 2.25;
         var lat = 37.75; // average Bay Area latitude
         var metersPerPixel = 40075016.686 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom + 8);
         return desiredPixelOffset * metersPerPixel;
     }
 
-    function offsetPolyline(points, offsetMeters) {
+    function getDist2(p1, p2) {
+        var dy = p1[0] - p2[0];
+        var dx = p1[1] - p2[1];
+        return dx * dx + dy * dy;
+    }
+
+    function projectPointOnSegment(p, a, b) {
+        var dy = b[0] - a[0];
+        var dx = b[1] - a[1];
+        var len2 = dx * dx + dy * dy;
+        if (len2 === 0) return { coords: a, t: 0, dist2: getDist2(p, a) };
+
+        var t = ((p[0] - a[0]) * dy + (p[1] - a[1]) * dx) / len2;
+        t = Math.max(0, Math.min(1, t));
+
+        var projCoords = [a[0] + t * dy, a[1] + t * dx];
+        return {
+            coords: projCoords,
+            t: t,
+            dist2: getDist2(p, projCoords)
+        };
+    }
+
+    function offsetPolyline(points, offsetMeters, refPoints) {
         if (!points || points.length === 0) return points;
         if (Array.isArray(points[0]) && Array.isArray(points[0][0])) {
             return points.map(function (subline) {
-                return offsetPolyline(subline, offsetMeters);
+                return offsetPolyline(subline, offsetMeters, refPoints);
             });
         }
         if (points.length < 2) return points;
@@ -904,11 +927,44 @@ const OAKLayers = (function () {
             var mx = dx * lngConv;
 
             var len = Math.sqrt(mx * mx + my * my);
-            if (len === 0) {
-                normals.push([0, 0]);
-            } else {
-                normals.push([-mx / len, my / len]);
+            var ny = 0;
+            var nx = 0;
+            if (len > 0) {
+                ny = -mx / len;
+                nx = my / len;
             }
+
+            // If refPoints is provided, check if we need to flip the normal
+            if (refPoints && refPoints.length >= 2) {
+                // Find the closest segment in refPoints to the midpoint of p1-p2
+                var mid = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+                var minDist2 = Infinity;
+                var closestSegIdx = -1;
+                
+                for (var k = 0; k < refPoints.length - 1; k++) {
+                    var proj = projectPointOnSegment(mid, refPoints[k], refPoints[k+1]);
+                    if (proj.dist2 < minDist2) {
+                        minDist2 = proj.dist2;
+                        closestSegIdx = k;
+                    }
+                }
+                
+                // If it is within SNAP_THRESHOLD, check direction
+                if (closestSegIdx !== -1 && Math.sqrt(minDist2) < 0.005) {
+                    var r1 = refPoints[closestSegIdx];
+                    var r2 = refPoints[closestSegIdx+1];
+                    var rdy = r2[0] - r1[0];
+                    var rdx = r2[1] - r1[1];
+                    
+                    var dot = dx * rdx + dy * rdy;
+                    if (dot < 0) {
+                        ny = -ny;
+                        nx = -nx;
+                    }
+                }
+            }
+
+            normals.push([ny, nx]);
         }
 
         for (var j = 0; j < n; j++) {
@@ -955,7 +1011,11 @@ const OAKLayers = (function () {
         selectedCities.forEach(function (sel) {
             var offsetBartRoute = [];
             if (sel.bartLayer && sel.bartRoute) {
-                offsetBartRoute = offsetPolyline(sel.bartRoute, -offsetMeters);
+                var mainHwRoute = null;
+                if (sel.hwRoute) {
+                    mainHwRoute = (Array.isArray(sel.hwRoute[0]) && Array.isArray(sel.hwRoute[0][0])) ? sel.hwRoute[0] : sel.hwRoute;
+                }
+                offsetBartRoute = offsetPolyline(sel.bartRoute, -offsetMeters, mainHwRoute);
                 sel.bartLayer.setLatLngs(offsetBartRoute);
             }
             if (sel.hwLayer && sel.hwRoute) {
@@ -988,31 +1048,10 @@ const OAKLayers = (function () {
             return { route: bartRoute, stationIndices: stationIndices };
         }
 
-        // Snap threshold: 1200 meters (~0.012 degrees)
-        var SNAP_THRESHOLD = 0.012;
+        // Snap threshold: 500 meters (~0.005 degrees)
+        var SNAP_THRESHOLD = 0.005;
 
-        function getDist2(p1, p2) {
-            var dy = p1[0] - p2[0];
-            var dx = p1[1] - p2[1];
-            return dx * dx + dy * dy;
-        }
 
-        function projectPointOnSegment(p, a, b) {
-            var dy = b[0] - a[0];
-            var dx = b[1] - a[1];
-            var len2 = dx * dx + dy * dy;
-            if (len2 === 0) return { coords: a, t: 0, dist2: getDist2(p, a) };
-
-            var t = ((p[0] - a[0]) * dy + (p[1] - a[1]) * dx) / len2;
-            t = Math.max(0, Math.min(1, t));
-
-            var projCoords = [a[0] + t * dy, a[1] + t * dx];
-            return {
-                coords: projCoords,
-                t: t,
-                dist2: getDist2(p, projCoords)
-            };
-        }
 
         // snappedInfo[i] will store the snapping result for bartRoute[i]
         var snappedInfo = new Array(bartRoute.length).fill(null);
@@ -1052,6 +1091,34 @@ const OAKLayers = (function () {
             if (isTransbaySegment(bartRoute[i-1], bartRoute[i])) {
                 snappedInfo[i-1] = null;
                 snappedInfo[i] = null;
+            }
+        }
+
+        // Third pass: enforce monotonicity of snapped positions along the highway to prevent crossovers
+        var firstSnapped = null;
+        var lastSnapped = null;
+        for (var i = 0; i < snappedInfo.length; i++) {
+            if (snappedInfo[i]) {
+                var pos = snappedInfo[i].segmentIndex + snappedInfo[i].t;
+                if (firstSnapped === null) {
+                    firstSnapped = pos;
+                }
+                lastSnapped = pos;
+            }
+        }
+        if (firstSnapped !== null && lastSnapped !== null && firstSnapped !== lastSnapped) {
+            var isIncreasing = (firstSnapped <= lastSnapped);
+            var lastPos = isIncreasing ? -Infinity : Infinity;
+            for (var i = 0; i < snappedInfo.length; i++) {
+                if (snappedInfo[i]) {
+                    var pos = snappedInfo[i].segmentIndex + snappedInfo[i].t;
+                    var isValid = isIncreasing ? (pos >= lastPos) : (pos <= lastPos);
+                    if (isValid) {
+                        lastPos = pos;
+                    } else {
+                        snappedInfo[i] = null;
+                    }
+                }
             }
         }
 
