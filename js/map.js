@@ -36,9 +36,8 @@ const OAKMap = (function () {
         map.setMinZoom(currentZoom);
         map.setMaxZoom(MAX_ZOOM);
 
-        // Adjust to 2 zoom levels closer for default start view
-        map.setZoom(currentZoom + 2);
-        map.panTo(BAY_AREA_CENTER, { animate: false });
+        // Adjust to 2 zoom levels closer and center on OAK atomically
+        map.setView(BAY_AREA_CENTER, currentZoom + 2, { animate: false });
 
         // Create custom panes for z-ordering
         // tooltipPane is z-index 650, so airport must be below that
