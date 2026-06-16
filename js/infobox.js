@@ -98,10 +98,11 @@ const OAKInfoBox = (function () {
             totalPop += d.pop || 0;
             if (!seenCounty[d.county]) { counties.push(d.county); seenCounty[d.county] = true; }
             if (!seenSub[d.sub]) { subs.push(d.sub); seenSub[d.sub] = true; }
-            if (d.dist < minDist) minDist = d.dist;
-            if (d.dist > maxDist) maxDist = d.dist;
-            if (d.time < minTime) minTime = d.time;
-            if (d.time > maxTime) maxTime = d.time;
+            var driveData = getDynamicCityDrivingData(name);
+            if (driveData.dist < minDist) minDist = driveData.dist;
+            if (driveData.dist > maxDist) maxDist = driveData.dist;
+            if (driveData.time < minTime) minTime = driveData.time;
+            if (driveData.time > maxTime) maxTime = driveData.time;
             (d.emp || []).forEach(function (e) {
                 if (!seenEmp[e]) { allEmployers.push(e); seenEmp[e] = true; }
             });
@@ -138,7 +139,12 @@ const OAKInfoBox = (function () {
         }
 
         // OAK distance block
-        var distStr = minDist === maxDist ? minDist + ' mi' : minDist + ' – ' + maxDist + ' mi';
+        var distStr = "";
+        if (minDist === maxDist) {
+            distStr = minDist + ' mi / ' + Math.round(minDist * 1.60934) + ' km';
+        } else {
+            distStr = minDist + ' – ' + maxDist + ' mi / ' + Math.round(minDist * 1.60934) + ' – ' + Math.round(maxDist * 1.60934) + ' km';
+        }
         var timeStr = minTime === maxTime ? minTime + ' min' : minTime + ' – ' + maxTime + ' min';
         var bartTimeStr = null;
         if (hasAnyBart) {
@@ -204,7 +210,8 @@ const OAKInfoBox = (function () {
 
         // OAK distance — accent block
         var bartTime = getBartTransitTime(name);
-        html += oakDistanceBlock(d.dist, d.time, bartTime, name);
+        var driveData = getDynamicCityDrivingData(name);
+        html += oakDistanceBlock(driveData.dist, driveData.time, bartTime, name);
 
         infoContent.innerHTML = html;
         show();
@@ -426,7 +433,8 @@ const OAKInfoBox = (function () {
         html += '<div class="info-oak-icon"></div>';
         html += '<div class="info-oak-label">DISTANCE TO OAK VIA BART</div>';
         html += '</div>';
-        html += '<div class="info-oak-dist">' + dist + ' mi</div>';
+        var km = Math.round(dist * 1.60934);
+        html += '<div class="info-oak-dist">' + dist + ' mi / ' + km + ' km</div>';
         html += '<div class="info-oak-time">' + time + ' min BART transit</div>';
         html += '</div>';
         return html;
@@ -458,7 +466,35 @@ const OAKInfoBox = (function () {
         return Math.round(miles * 1.6) + 2;
     }
 
+    function getDynamicCityDrivingData(cityName) {
+        var route = OAKRoutes.getHighwayRoute(cityName);
+        if (!route || route.length < 2) {
+            var d = CITY_DATA[cityName];
+            return { dist: d ? d.dist : 0, time: d ? d.time : 0 };
+        }
 
+        var totalMiles = 0;
+        var R = 3958.8; // Radius of Earth in miles
+        for (var i = 0; i < route.length - 1; i++) {
+            var p1 = route[i];
+            var p2 = route[i+1];
+            var dLat = (p2[0] - p1[0]) * Math.PI / 180;
+            var dLng = (p2[1] - p1[1]) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(p1[0] * Math.PI / 180) * Math.cos(p2[0] * Math.PI / 180) *
+                      Math.sin(dLng/2) * Math.sin(dLng/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            totalMiles += R * c;
+        }
+
+        var dist = Math.round(totalMiles);
+        // Average speed under no traffic congestion is ~55 mph.
+        // We add 2 minutes for local street transitions.
+        var time = Math.round((totalMiles / 55) * 60 + 2);
+        time = Math.max(5, time);
+
+        return { dist: dist, time: time };
+    }
 
     function getDriveTimeToStation(cityName, stationName) {
         var route = OAKRoutes.getHighwayRoute(cityName);
@@ -489,7 +525,8 @@ const OAKInfoBox = (function () {
         html += '<div class="info-oak-icon"></div>';
         html += '<div class="info-oak-label">DISTANCE TO OAK</div>';
         html += '</div>';
-        html += '<div class="info-oak-dist">' + dist + ' mi</div>';
+        var km = Math.round(dist * 1.60934);
+        html += '<div class="info-oak-dist">' + dist + ' mi / ' + km + ' km</div>';
         html += '<div class="info-oak-time">' + time + ' min drive</div>';
         if (bartTime) {
             var bartStr = bartTime + ' min BART transit';
