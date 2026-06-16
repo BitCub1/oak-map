@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Bahnschrift';
+    src: url('../fonts/bahnschrift.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* ============================================================
    OAK — THE HEART OF THE BAY AREA
    Design System: Grayscale, Right-Angle, Bahnschrift
@@ -10,6 +17,7 @@
     padding: 0;
     box-sizing: border-box;
     border-radius: 0 !important;
+    font-family: 'Bahnschrift', sans-serif !important;
 }
 
 html, body {
