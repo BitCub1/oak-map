@@ -73,7 +73,7 @@ h1, h2, h3, h4, h5, h6, label, button, input {
 
 #header-oak-icon {
     color: #F04A00;
-    margin-right: 4px;
+    margin: 0 6px;
 }
 
 #header-separator {
