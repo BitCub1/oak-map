@@ -796,6 +796,10 @@ const OAKLayers = (function () {
         updateCityBorders();
 
         OAKInfoBox.showBayArea();
+
+        if (window.OAKMap && typeof window.OAKMap.resetView === 'function') {
+            window.OAKMap.resetView();
+        }
     }
 
     // Legacy stubs — kept for external callers

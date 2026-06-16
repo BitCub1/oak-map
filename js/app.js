@@ -21,8 +21,11 @@ const OAKApp = (function () {
         toggleBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             var collapsed = infoBox.classList.toggle('collapsed');
-            // Vertical tab: ∨ when collapsed (click to expand down), ∧ when expanded (click to collapse up)
-            toggleBtn.innerHTML = collapsed ? '&#x2228;' : '&#x2227;';
+            if (collapsed) {
+                toggleBtn.classList.remove('active');
+            } else {
+                toggleBtn.classList.add('active');
+            }
         });
 
         // 3. Initialize layers (loads GeoJSON async)
@@ -54,6 +57,14 @@ const OAKApp = (function () {
         // 5. Map click on empty area → show Bay Area overview
         map.on('click', function () {
             OAKLayers.clearSelection();
+        });
+
+        // Right click on map → deselect
+        map.on('contextmenu', function (e) {
+            OAKLayers.clearSelection();
+            if (e.originalEvent) {
+                e.originalEvent.preventDefault();
+            }
         });
 
         // 6. Keyboard shortcuts

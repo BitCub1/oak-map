@@ -12,16 +12,27 @@ const OAKMap = (function () {
     const MIN_ZOOM = 8;
     const MAX_ZOOM = 16;
 
+    const bounds = L.latLngBounds(
+        [37.1, -123.0],  // SW
+        [38.9, -121.2]   // NE
+    );
+
     function init() {
         map = L.map('map', {
-            center: BAY_AREA_CENTER,
-            zoom: DEFAULT_ZOOM,
-            minZoom: MIN_ZOOM,
-            maxZoom: MAX_ZOOM,
             zoomControl: false,
             renderer: L.canvas({ padding: 0.5 }),
-            attributionControl: true
+            attributionControl: true,
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0
         });
+
+        // Fit map bounds to the Bay Area initially
+        map.fitBounds(bounds, { animate: false });
+
+        // Lock min zoom dynamically to whatever fitBounds calculated so user cannot zoom out further
+        const currentZoom = map.getZoom();
+        map.setMinZoom(currentZoom);
+        map.setMaxZoom(MAX_ZOOM);
 
         // Create custom panes for z-ordering
         // tooltipPane is z-index 650, so airport must be below that
@@ -65,7 +76,11 @@ const OAKMap = (function () {
     }
 
     function resetView() {
-        map.flyTo(BAY_AREA_CENTER, DEFAULT_ZOOM, { duration: 0.5 });
+        const bounds = L.latLngBounds(
+            [37.1, -123.0],  // SW
+            [38.9, -121.2]   // NE
+        );
+        map.flyToBounds(bounds, { duration: 0.5 });
     }
 
     return {

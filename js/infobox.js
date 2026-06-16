@@ -22,15 +22,36 @@ const OAKInfoBox = (function () {
             // Reset collapsed state so next open is fully expanded
             infoBox.classList.remove('collapsed');
             var t = document.getElementById('info-box-toggle');
-            if (t) t.innerHTML = '&#x2227;';
+            if (t) {
+                t.classList.remove('active');
+                t.classList.add('hidden');
+            }
             if (window.OAKApp && window.OAKApp.clearSelection) {
                 window.OAKApp.clearSelection();
             }
         });
     }
 
-    function show() { infoBox.classList.remove('hidden'); }
-    function hide() { infoBox.classList.add('hidden'); currentType = null; currentName = null; }
+    function show() {
+        infoBox.classList.remove('hidden');
+        var t = document.getElementById('info-box-toggle');
+        if (t) {
+            t.classList.remove('hidden');
+            t.classList.add('active');
+        }
+    }
+
+    function hide() {
+        infoBox.classList.add('hidden');
+        var t = document.getElementById('info-box-toggle');
+        if (t) {
+            t.classList.add('hidden');
+            t.classList.remove('active');
+        }
+        currentType = null;
+        currentName = null;
+    }
+
     function isVisible() { return !infoBox.classList.contains('hidden'); }
 
     // ---- Breadcrumb ----
