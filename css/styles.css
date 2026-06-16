@@ -234,13 +234,13 @@ h1, h2, h3, h4, h5, h6, label, button, input {
 .bart-station-label {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     vertical-align: middle;
 }
 
 .bart-station-tooltip-icon {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     flex-shrink: 0;
 }
