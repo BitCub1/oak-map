@@ -459,7 +459,7 @@ const OAKLayers = (function () {
             iconSize: [40, 40],
             iconAnchor: [20, 20]
         });
-        rippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane' }).addTo(map);
+        rippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane', zIndexOffset: 2000 }).addTo(map);
     }
 
     function addAirportRippleMarker(latlng) {
@@ -473,7 +473,7 @@ const OAKLayers = (function () {
             iconSize: [40, 40],
             iconAnchor: [20, 20]
         });
-        airportRippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane' }).addTo(map);
+        airportRippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane', zIndexOffset: 2000 }).addTo(map);
     }
 
     function animatePolyline(polyline) {
