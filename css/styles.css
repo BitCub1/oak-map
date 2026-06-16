@@ -216,6 +216,14 @@ h1, h2, h3, h4, h5, h6, label, button, input {
     flex-shrink: 0;
 }
 
+.city-tooltip .bart-station-tooltip-icon path {
+    fill: #ffffff;
+}
+
+.city-tooltip--selected .bart-station-tooltip-icon path {
+    fill: #000000;
+}
+
 /* --- Info Box Panel --- */
 #info-box {
     position: fixed;
