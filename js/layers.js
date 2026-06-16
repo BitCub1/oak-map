@@ -23,6 +23,7 @@ const OAKLayers = (function () {
     let selectedCities = new Map();
     let selectedCountyName = null;
     let onReadyCallback = null;
+    let rippleMarker = null;
 
     // ================================================================
     // STYLES
@@ -384,6 +385,45 @@ const OAKLayers = (function () {
         }
     }
 
+    // ---- Internal: Selection Animations (Motion Graphics) ----
+    function addRippleMarker(latlng) {
+        if (!map) return;
+        if (rippleMarker) {
+            map.removeLayer(rippleMarker);
+        }
+        var rippleIcon = L.divIcon({
+            className: 'map-ripple-icon',
+            html: '<div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-ring"></div><div class="ripple-dot"></div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
+        rippleMarker = L.marker(latlng, { icon: rippleIcon, pane: 'markerPane' }).addTo(map);
+    }
+
+    function animatePolyline(polyline) {
+        if (!polyline || typeof polyline.getElement !== 'function') return;
+        setTimeout(function () {
+            var path = polyline.getElement();
+            if (path) {
+                var length = path.getTotalLength();
+                path.style.strokeDasharray = length;
+                path.style.strokeDashoffset = length;
+                path.getBoundingClientRect(); // force reflow
+                path.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                path.style.strokeDashoffset = '0';
+                
+                // Clean up transition styles after animation completes so zooming/panning works normally
+                setTimeout(function () {
+                    if (path) {
+                        path.style.transition = '';
+                        path.style.strokeDasharray = '';
+                        path.style.strokeDashoffset = '';
+                    }
+                }, 1600);
+            }
+        }, 50);
+    }
+
     // ---- Internal: add a single city to selection ----
     function addCityToSelection(name, layer) {
         layer.setStyle(STYLES.city.selected);
@@ -400,6 +440,11 @@ const OAKLayers = (function () {
             opacity: 1
         });
         layer.openTooltip();
+
+        // Add pulsing ripple marker at city centroid
+        if (layer && typeof layer.getBounds === 'function') {
+            addRippleMarker(layer.getBounds().getCenter());
+        }
 
         // Build per-city route layers — BART first, highway on top
         var hwLayer = null, bartLayer = null;
@@ -433,11 +478,13 @@ const OAKLayers = (function () {
             var bartChecked = bartCheckbox ? bartCheckbox.checked : true;
             if (bartChecked) {
                 bartLayer.addTo(map);
+                animatePolyline(bartLayer);
             }
         }
         if (hwRoute && hwRoute.length >= 2) {
             var offsetHwRoute = offsetPolyline(hwRoute, offsetMeters);
             hwLayer = L.polyline(offsetHwRoute, Object.assign({}, STYLES.routeHighlight.highway, {pane: 'routePane'})).addTo(map);
+            animatePolyline(hwLayer);
         }
 
         // Draw individual BART station markers along the selected route as blue squares (disabled)
@@ -528,6 +575,19 @@ const OAKLayers = (function () {
                 countyLayer.addTo(map);
             }
             countyLayer.bringToBack();
+            
+            // Add pulsing ripple marker at county centroid
+            var countyFeatureLayer = null;
+            countyLayer.eachLayer(function (l) {
+                var rawName = l.feature.properties.NAME || l.feature.properties.name || '';
+                var featureCountyName = rawName.replace(/ County$/i, '');
+                if (featureCountyName === name) {
+                    countyFeatureLayer = l;
+                }
+            });
+            if (countyFeatureLayer && typeof countyFeatureLayer.getBounds === 'function') {
+                addRippleMarker(countyFeatureLayer.getBounds().getCenter());
+            }
         }
 
         OAKInfoBox.showCounty(name);
@@ -545,9 +605,14 @@ const OAKLayers = (function () {
         var bartLayer = L.polyline(bartRoute, Object.assign({}, STYLES.routeHighlight.bart, {pane: 'routePane'}));
         if (bartChecked) {
             bartLayer.addTo(map);
+            animatePolyline(bartLayer);
         }
 
         var selectedCoords = bartRoute[0];
+        
+        // Add pulsing ripple marker at station coordinate
+        addRippleMarker(selectedCoords);
+
         var marker = L.marker(selectedCoords, {
             icon: L.divIcon({
                 className: 'bart-station-icon-square',
@@ -597,6 +662,12 @@ const OAKLayers = (function () {
     }
 
     function clearSelection() {
+        // Remove ripple marker
+        if (rippleMarker) {
+            map.removeLayer(rippleMarker);
+            rippleMarker = null;
+        }
+
         // Remove all per-city route layers and restore tooltips
         selectedCities.forEach(function (sel, name) {
             if (sel.hwLayer) map.removeLayer(sel.hwLayer);

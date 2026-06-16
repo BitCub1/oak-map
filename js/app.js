@@ -12,6 +12,9 @@ const OAKApp = (function () {
         // 2. Initialize info box
         OAKInfoBox.init();
 
+        // 2a. Initialize video recorder
+        OAKRecorder.init();
+
         // 2b. Info box collapse toggle
         var infoBox = document.getElementById('info-box');
         var toggleBtn = document.getElementById('info-box-toggle');
