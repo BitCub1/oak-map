@@ -463,7 +463,9 @@ const OAKLayers = (function () {
         // to prevent crossings and gaps when offset.
         if (bartRoute) {
             if (hwRoute) {
-                var alignResult = alignBartRouteToHighway(bartRoute, hwRoute);
+                // If hwRoute is a MultiPolyline (LatLng[][]), use the main highway route (hwRoute[0]) for alignment.
+                var mainHwRoute = (Array.isArray(hwRoute[0]) && Array.isArray(hwRoute[0][0])) ? hwRoute[0] : hwRoute;
+                var alignResult = alignBartRouteToHighway(bartRoute, mainHwRoute);
                 bartRoute = alignResult.route;
                 stationIndices = alignResult.stationIndices;
             } else {
@@ -484,7 +486,17 @@ const OAKLayers = (function () {
                 animatePolyline(bartLayer);
             }
         }
-        if (hwRoute && hwRoute.length >= 2) {
+
+        var hasValidHwRoute = false;
+        if (hwRoute) {
+            if (Array.isArray(hwRoute[0]) && Array.isArray(hwRoute[0][0])) {
+                hasValidHwRoute = hwRoute[0].length >= 2;
+            } else {
+                hasValidHwRoute = hwRoute.length >= 2;
+            }
+        }
+
+        if (hasValidHwRoute) {
             var offsetHwRoute = offsetPolyline(hwRoute, offsetMeters);
             hwLayer = L.polyline(offsetHwRoute, Object.assign({}, STYLES.routeHighlight.highway, {pane: 'routePane'})).addTo(map);
             animatePolyline(hwLayer);
@@ -783,7 +795,13 @@ const OAKLayers = (function () {
     }
 
     function offsetPolyline(points, offsetMeters) {
-        if (!points || points.length < 2) return points;
+        if (!points || points.length === 0) return points;
+        if (Array.isArray(points[0]) && Array.isArray(points[0][0])) {
+            return points.map(function (subline) {
+                return offsetPolyline(subline, offsetMeters);
+            });
+        }
+        if (points.length < 2) return points;
 
         var latConv = 111111;
         var avgLat = 37.75;

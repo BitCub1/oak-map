@@ -406,14 +406,8 @@ const OAKRoutes = (function () {
                     }
                 }
                 
-                var extended = [stationCoords];
-                for (var i = closestIdx; i >= 0; i--) {
-                    extended.push(route[i]);
-                }
-                for (var i = 0; i < route.length; i++) {
-                    extended.push(route[i]);
-                }
-                return extended;
+                // Return a MultiPolyline: [main_highway_route, [closest_vertex, station_coords]]
+                return [route, [route[closestIdx], stationCoords]];
             }
         }
         return route;
