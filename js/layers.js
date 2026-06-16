@@ -478,26 +478,53 @@ const OAKLayers = (function () {
 
     function animatePolyline(polyline) {
         if (!polyline || typeof polyline.getElement !== 'function') return;
-        setTimeout(function () {
+
+        // Clear any pending start timeout
+        if (polyline._pendingTimeout) {
+            clearTimeout(polyline._pendingTimeout);
+            polyline._pendingTimeout = null;
+        }
+        // Clear any active completion cleanup timeout
+        if (polyline._animationTimeout) {
+            clearTimeout(polyline._animationTimeout);
+            polyline._animationTimeout = null;
+        }
+
+        polyline._pendingTimeout = setTimeout(function () {
+            polyline._pendingTimeout = null;
             var path = polyline.getElement();
             if (path) {
                 var length = path.getTotalLength();
+                path.style.transition = 'none';
                 path.style.strokeDasharray = length;
                 path.style.strokeDashoffset = length;
                 path.getBoundingClientRect(); // force reflow
+
                 path.style.transition = 'stroke-dashoffset 3.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
                 path.style.strokeDashoffset = '0';
-                
+
                 // Clean up transition styles after animation completes so zooming/panning works normally
-                setTimeout(function () {
+                polyline._animationTimeout = setTimeout(function () {
                     if (path) {
                         path.style.transition = '';
                         path.style.strokeDasharray = '';
                         path.style.strokeDashoffset = '';
                     }
+                    polyline._animationTimeout = null;
                 }, 3600);
             }
         }, 50);
+    }
+
+    function restartAllRouteAnimations() {
+        selectedCities.forEach(function (sel) {
+            if (sel.bartLayer) {
+                animatePolyline(sel.bartLayer);
+            }
+            if (sel.hwLayer) {
+                animatePolyline(sel.hwLayer);
+            }
+        });
     }
 
     // ---- Internal: add a single city to selection ----
@@ -591,6 +618,10 @@ const OAKLayers = (function () {
         updateCityBorders();
 
         if (airportLayer) airportLayer.bringToFront();
+
+        if (selectedCities.size > 1) {
+            restartAllRouteAnimations();
+        }
     }
 
     // ---- Internal: remove a single city from selection ----
